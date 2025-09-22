@@ -1,0 +1,37 @@
+<div class="app-container">
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark magnetic-dark" name="Novus.AI" *ngIf="authService.isLoggedIn()">
+    <div class="container-fluid">
+      <div class="navbar-brand">  
+        <span class="header-heading-title">Novus.AI</span>
+      </div>
+      <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+        <div class="theme-dropdown me-3" [class.open]="isDropdownOpen">
+          <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" 
+                  (click)="toggleDropdown()">
+            <i class="bi bi-palette me-1"></i>
+            {{ (currentTheme$ | async)?.name || 'Theme' }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" [class.show]="isDropdownOpen">
+            <li *ngFor="let theme of availableThemes">
+              <a class="dropdown-item" 
+                 [class.active]="(currentTheme$ | async)?.id === theme.id"
+                 (click)="setTheme(theme)" 
+                 style="cursor: pointer;">
+                <i class="bi bi-circle-fill me-2" [style.color]="theme.colors.primary"></i>
+                {{ theme.name }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <span *ngIf="username" class="navbar-text text-white me-3">{{ username }}</span>
+        <button class="btn btn-outline-light btn-sm" (click)="logout()" title="Logout">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="content-container">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+

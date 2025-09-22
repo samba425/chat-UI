@@ -1,0 +1,147 @@
+/* Always dark header styling */
+.magnetic-dark {
+  background: #23272f !important;
+  color: #ffffff !important;
+  padding: 0px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 1px solid #333 !important;
+  z-index: 99999;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--theme-background, #ffffff);
+  color: var(--theme-text, #000000);
+}
+
+header {
+  flex-shrink: 0;
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-heading-title {
+  color: #ffffff !important;
+}
+
+.navbar-text {
+  color: #ffffff !important;
+}
+
+/* Custom theme dropdown styling */
+.theme-dropdown {
+  position: relative;
+}
+
+.theme-dropdown .dropdown-menu {
+  background: #2d3748 !important;
+  border: 1px solid #4a5568 !important;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.theme-dropdown .dropdown-menu.show {
+  display: block !important;
+}
+
+.dropdown-item {
+  color: #ffffff !important;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #4a5568 !important;
+  color: #ffffff !important;
+}
+
+.dropdown-item.active {
+  background-color: #667eea !important;
+  color: #ffffff !important;
+}
+
+.dropdown-item.active .bi-circle-fill {
+  color: #ffffff !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+  border-radius: 4px;
+}
+.logout-btn:hover {
+  background: #334155;
+}
+.logout-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* The .header class is not used and can be removed. */
+
+.header-heading-title {
+  color: #f8fafc; /* Changed to light color */
+  font-family: var(--font-family-heading);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  margin-left: 2%;
+}
+
+.content-container {
+  flex-grow: 1;
+  overflow: hidden; /* This prevents the container from affecting sibling elements like the header */
+  /* height: 100%; was removed as it can cause issues in flex containers */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  height: 40px;
+  margin-right: 10px;
+}

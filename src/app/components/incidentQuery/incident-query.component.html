@@ -1,0 +1,262 @@
+<div class="page-container" [class.dark-mode]="isDarkMode$ | async">
+  <div class="main-content">
+    <div class="threads-sidebar">
+      <div class="card h-100 full-height card-design subtle sidebar-header">
+        <div class="card-body">
+          <!-- <div class="sidebar-header">
+            <div class="theme-toggle">
+              <h2 class="header-heading-title">Novus Chat</h2>
+            </div>
+          </div> -->
+          <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" [class.active]="activeTab === 'chat'" 
+                      id="chat-tab" data-bs-toggle="tab" type="button" role="tab" 
+                      aria-controls="chat" [attr.aria-selected]="activeTab === 'chat'" 
+                      (click)="selectTab('chat')">Chat</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" [class.active]="activeTab === 'settings'" 
+                      id="settings-tab" data-bs-toggle="tab" type="button" role="tab" 
+                      aria-controls="settings" [attr.aria-selected]="activeTab === 'settings'" 
+                      (click)="selectTab('settings')">Settings</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" [class.active]="activeTab === 'data'" 
+                      id="data-tab" data-bs-toggle="tab" type="button" role="tab" 
+                      aria-controls="data" [attr.aria-selected]="activeTab === 'data'" 
+                      (click)="selectTab('data')">Data</button>
+            </li>
+          </ul>
+
+          <div *ngIf="activeTab === 'data'" class="data-views">
+            <div class="list-group">
+              <button type="button" class="list-group-item list-group-item-action" 
+                      [class.active]="activeDataView === 'dashboard'" 
+                      (click)="selectDataView('dashboard')">Dashboard</button>
+              <button type="button" class="list-group-item list-group-item-action" 
+                      [class.active]="activeDataView === 'import'" 
+                      (click)="selectDataView('import')">Upload</button>
+              <button type="button" class="list-group-item list-group-item-action" 
+                      [class.active]="activeDataView === 'status'" 
+                      (click)="selectDataView('status')">Status</button>
+            </div>
+          </div>
+
+          <div *ngIf="activeTab === 'chat'">
+            <button class="btn btn-primary w-100 mb-3 new-thread-button" (click)="newThread()">
+              <!-- <i class="bi bi-plus-circle me-2"></i> -->
+              + New chat
+            </button>
+            <div *ngFor="let group of ['Today', 'Previous 30 days', 'Older']">
+              <h6 class="group-heading text-muted">{{ group }}</h6>
+              <div class="data-views" *ngIf="(groupedThreads[group] || []).length > 0">
+                <div class="list-group mb-3">
+                  <button type="button" 
+                          class="list-group-item list-group-item-action" 
+                          *ngFor="let thread of groupedThreads[group]; let i = index" 
+                          (click)="selectThread(thread)" 
+                          [class.active]="activeIndex[thread._id]">
+                    {{ thread.name ? thread.name : thread.usecase_name }}
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="(groupedThreads[group] || []).length === 0" class="text-muted small no-threads">
+                No threads in this period.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-area">
+      <div [ngSwitch]="activeTab">
+        <div *ngSwitchCase="'chat'">
+          <div class="card h-100 conversation-card card-design">
+            <div class="card-body d-flex flex-column p-0">
+              <div #chatContainer class="messages-container flex-grow-1" (scroll)="onScroll($event)">
+                <!-- Welcome Screen -->
+                <div *ngIf="isNewThread" class="welcome-container"> 
+                 <div class="cm-ai-welcome text-center">
+                    <div class="greeting">
+                      <div class="greeting-logo">
+                       <!-- <img src="../../../assets/N-bg.png" alt="" srcset=""> -->
+                      </div>
+                      <div class="greeting-text"> 
+                        <h1 class="display-5 mb-3">How can I help you today?</h1>
+                        <p class="lead text-muted">I am the Novus chat Assistant. your partner in network monitoring, 
+                          troubleshooting, and performance reporting. Please type in your query.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      
+                <!-- Chat View -->
+                <div *ngIf="!isNewThread" class="chat-history">
+                  <div *ngFor="let message of messages; let i = index; trackBy: trackByMessageId" class="message-wrapper mb-3" 
+                       [attr.data-message-index]="i"
+                       [ngClass]="{'message-new': isNewMessage(i), 'message-existing': !isNewMessage(i)}">
+                     <div *ngIf="message.message.metadata.sender === 'USER'" class="card card-design cm-user-message">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-2"> 
+                          <img src="assets/profileImg.jpg" alt="user avatar" height="24" width="24" class="rounded-circle me-2">
+                          <strong class="me-auto">{{ username || 'You' }}</strong>
+                          <small class="text-muted">{{message.createdAt | customDateTime}}</small>
+                          <button class="btn btn-sm btn-outline-secondary ms-2" (click)="editMessage(message)" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                        </div>
+                        <p class="mb-0">{{message.message.output}}</p>
+                      </div>
+                    </div>
+                    <div *ngIf="message.message.metadata.sender === 'SYSTEM'" class="card card-design cm-ai-response-container"
+                         [ngClass]="{'response-new': isNewMessage(i), 'response-existing': !isNewMessage(i)}">
+                        <div class="card-body">
+                          <div class="d-flex align-items-center mb-2">
+                            <img src="assets/botIcon.png" alt="ai assistant logo" height="24" width="24" class="me-2">
+                            <strong class="me-auto">AI Assistant</strong>
+                            <small class="text-muted">{{message.createdAt | customDateTime}}</small>
+                          </div>
+                          <div class="message-content" 
+                               [ngClass]="{
+                                 'message-streaming': !message.isLoading && isMessageStreaming(i), 
+                                 'message-complete': !message.isLoading && isMessageComplete(i), 
+                                 'message-static': !isNewMessage(i),
+                                 'message-thinking': message.isLoading
+                               }">
+                            <div [innerHTML]="message.message.safeOutput" class="ai-response-text"></div>
+                            <div *ngIf="message.isLoading" class="thinking-animation spectacular-thinking">
+                              <div class="thinking-container">
+                                <!-- Neural Network Effect (Compact) -->
+                                <div class="neural-network">
+                                  <div class="neural-node" *ngFor="let node of [1,2,3]"></div>
+                                  <div class="neural-connection" *ngFor="let conn of [1,2]"></div>
+                                </div>
+                                
+                                <!-- Compact Brain Icon -->
+                                <div class="brain-icon-container compact">
+                                  <i class="bi bi-cpu brain-icon"></i>
+                                  <div class="brain-pulse"></div>
+                                </div>
+                                
+                                <!-- Horizontal Thinking Layout -->
+                                <div class="thinking-content-horizontal">
+                                  <!-- Enhanced Thinking Dots -->
+                                  <div class="thinking-dots enhanced-dots">
+                                    <span class="dot" *ngFor="let dot of [1,2,3]"></span>
+                                  </div>
+                                  
+                                  <!-- Thinking Text -->
+                                  <div class="thinking-text enhanced-text">
+                                    <span class="text-muted thinking-label">Novus is thinking</span>
+                                    <span class="thinking-ellipsis animated-ellipsis"></span>
+                                  </div>
+                                </div>
+                                
+                                <!-- Subtle Data Streams -->
+                                <div class="data-streams compact">
+                                  <div class="stream-line" *ngFor="let stream of [1,2,3]"></div>
+                                </div>
+                                
+                                <!-- Subtle Holographic Effect -->
+                                <div class="holographic-overlay subtle"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-area">
+                <div class="p-3 enhanced-input-container">
+                  <!-- Floating Particles Background -->
+                  <div class="floating-particles" [class.active]="isFocused">
+                    <div class="particle" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+                  </div>
+                  
+                  <!-- Animated Border Gradient -->
+                  <div class="input-border-gradient" [class.active]="isFocused"></div>
+                  
+                  <div class="input-group enhanced-input-group">
+                    <div class="textarea-wrapper" [class.focused]="isFocused" [class.typing]="textareaValue.length > 0">
+                      <textarea #textarea [(ngModel)]="textareaValue" 
+                                class="form-control enhanced-textarea" 
+                                placeholder="Hello! I am the Novus chat Assistant. Please type in your query..." 
+                                (keydown)="onKeyDown($event)" 
+                                (input)="autoResize(textarea)"
+                                (focus)="isFocused = true" 
+                                (blur)="isFocused = false" 
+                                rows="2">
+                      </textarea>
+                      
+                      <!-- Typing Indicator Glow -->
+                      <div class="typing-glow" [class.active]="textareaValue.length > 0"></div>
+                      
+                      <!-- Magic Cursor Trail -->
+                      <div class="cursor-trail" [class.active]="isFocused"></div>
+                    </div>
+                    
+                    <!-- Enhanced Clear Button -->
+                    <button *ngIf="textareaValue" 
+                            (click)="textareaValue = ''" 
+                            class="btn btn-outline-secondary enhanced-clear-btn"
+                            type="button">
+                      <div class="clear-btn-bg"></div>
+                      <i class="bi bi-x"></i>
+                      <div class="ripple-effect"></div>
+                    </button>
+                    
+                    <!-- Enhanced Send Button -->
+                    <button class="btn btn-primary enhanced-send-btn" 
+                            [disabled]="loadingSend || textareaValue.trim() === ''" 
+                            (click)="sendMessage()"
+                            type="button"
+                            [class.pulse-ready]="textareaValue.trim().length > 0 && !loadingSend"
+                            [class.sending]="loadingSend">
+                      <!-- Button Background Gradient -->
+                      <div class="btn-gradient-bg"></div>
+                      
+                      <!-- Ripple Effect -->
+                      <div class="ripple-effect"></div>
+                      
+                      <!-- Content -->
+                      <div class="btn-content">
+                        <span *ngIf="loadingSend" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <i *ngIf="!loadingSend" class="bi bi-send send-icon"></i>
+                        <span class="btn-text">{{ loadingSend ? 'Sending...' : 'Send' }}</span>
+                      </div>
+                      
+                      <!-- Success Animation -->
+                      <div class="success-burst"></div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="'settings'">
+          <div class="card h-100 conversation-card card-design">
+            <div class="card-body">
+              <app-settings-dashboard></app-settings-dashboard>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="'data'" class="full-height-content">
+          <div class="card h-100 conversation-card card-design">
+            <div class="card-body">
+              <app-data-dashboard *ngIf="activeDataView === 'dashboard'" (sourceClicked)="showDocuments()"></app-data-dashboard>
+              <app-import-data *ngIf="activeDataView === 'import'"></app-import-data>
+              <app-status-dashboard *ngIf="activeDataView === 'status'"></app-status-dashboard>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="'documents'">
+          <app-document-list></app-document-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,750 @@
+/* ===== CENTRALIZED THEME MANAGEMENT ===== */
+/* This file contains all theme-related styling for consistent color changes across the entire application */
+
+/* ===== THEME VARIABLES ===== */
+:root {
+  /* Default light theme variables */
+  --theme-primary: #667eea;
+  --theme-secondary: #764ba2;
+  --theme-background: #ffffff;
+  --theme-surface: #f8fafc;
+  --theme-text: #1f2937;
+  --theme-accent: #50e3c2;
+}
+
+/* ===== GLOBAL THEME OVERRIDES ===== */
+/* Apply theme variables to all major components */
+
+/* Body and main containers */
+body,
+.app-container,
+.page-container,
+.chat-content-wrapper,
+.main-content,
+.full-height,
+.full-height-content {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Remove background images for themed content */
+.messages-container,
+.full-height {
+  background-image: none !important;
+  background-color: var(--theme-background) !important;
+}
+
+/* ===== SIDEBAR THEME STYLING ===== */
+.threads-sidebar {
+  background: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar cards - FORCE theme colors */
+.threads-sidebar .card,
+.threads-sidebar .card-body,
+.threads-sidebar .full-height,
+.threads-sidebar .card-design,
+.threads-sidebar .sidebar-header {
+  background: var(--theme-surface) !important;
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Sidebar header */
+.sidebar-header {
+  background: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+.sidebar-header h2,
+.sidebar-header .header-heading-title {
+  color: var(--theme-text) !important;
+}
+
+/* New thread button */
+.new-thread-button {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent)) !important;
+  color: white !important;
+  border-color: var(--theme-primary) !important;
+}
+
+.new-thread-button:hover {
+  background: linear-gradient(135deg, var(--theme-accent), var(--theme-primary)) !important;
+}
+
+/* Navigation tabs */
+.threads-sidebar .nav-tabs {
+  border-bottom-color: var(--theme-secondary) !important;
+  background: transparent !important;
+}
+
+.threads-sidebar .nav-tabs .nav-link {
+  color: var(--theme-text) !important;
+  border-color: transparent !important;
+  background-color: transparent !important;
+}
+
+.threads-sidebar .nav-tabs .nav-link:hover {
+  background-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.threads-sidebar .nav-tabs .nav-link.active {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+  border-color: var(--theme-primary) !important;
+}
+
+/* Group headings */
+.group-heading {
+  color: var(--theme-accent) !important;
+}
+
+/* Thread items */
+.thread-item {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.thread-item:hover {
+  background-color: var(--theme-secondary) !important;
+}
+
+.thread-item.active {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+/* List group items - FORCE theme colors */
+.threads-sidebar .list-group,
+.threads-sidebar .list-group-item,
+.threads-sidebar .list-group-item-action {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.threads-sidebar .list-group-item:hover,
+.threads-sidebar .list-group-item-action:hover {
+  background-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.threads-sidebar .list-group-item.active,
+.threads-sidebar .list-group-item-action.active {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+  border-color: var(--theme-primary) !important;
+}
+
+/* ===== COMPONENT THEME STYLING ===== */
+/* Apply theme colors to all major components */
+
+/* Import Data Component */
+.import-container,
+.import-section,
+.status-check-container {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+.import-container .import-section,
+.import-container .status-check-container {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* Data Dashboard Component */
+.data-dashboard-container,
+.data-dashboard {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Settings Dashboard Component */
+.settings-dashboard-container,
+.settings-dashboard {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Status Dashboard Component */
+.status-dashboard-container,
+.status-dashboard {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Document List Component */
+.document-list-container {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Modal Component */
+.modal-content,
+.modal-body,
+.modal-header,
+.modal-footer {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* General component containers */
+.container,
+.content-wrapper,
+.main-wrapper {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+.chat-footer {
+  background-color: var(--theme-surface) !important;
+  border-top-color: var(--theme-secondary) !important;
+}
+
+/* Input fields */
+.cm-ai-footer-input,
+.form-control,
+input,
+textarea {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+.cm-ai-footer-input::placeholder,
+.form-control::placeholder {
+  color: var(--theme-text) !important;
+  opacity: 0.6;
+}
+
+/* ===== BUTTON THEME STYLING ===== */
+.btn-primary {
+  background-color: var(--theme-primary) !important;
+  border-color: var(--theme-primary) !important;
+}
+
+.btn-secondary {
+  background-color: var(--theme-secondary) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* ===== CARD THEME STYLING ===== */
+.card {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* ===== COMPONENT CARDS AND SECTIONS ===== */
+/* Override hardcoded backgrounds in component cards and sections */
+
+/* All cards and sections in components */
+.import-section,
+.status-check-container,
+.dashboard-section,
+.settings-section,
+.data-section,
+.card,
+.section,
+.panel {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Specific overrides for each theme's cards */
+body.theme-ocean .import-section,
+body.theme-ocean .status-check-container,
+body.theme-ocean .dashboard-section,
+body.theme-ocean .card {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+body.theme-forest .import-section,
+body.theme-forest .status-check-container,
+body.theme-forest .dashboard-section,
+body.theme-forest .card {
+  background-color: #1f2937 !important;
+  color: #f0fdf4 !important;
+}
+
+body.theme-sunset .import-section,
+body.theme-sunset .status-check-container,
+body.theme-sunset .dashboard-section,
+body.theme-sunset .card {
+  background-color: #292524 !important;
+  color: #fef7ff !important;
+}
+
+body.theme-royal .import-section,
+body.theme-royal .status-check-container,
+body.theme-royal .dashboard-section,
+body.theme-royal .card {
+  background-color: #1e1b3b !important;
+  color: #f8fafc !important;
+}
+
+body.theme-dark .import-section,
+body.theme-dark .status-check-container,
+body.theme-dark .dashboard-section,
+body.theme-dark .card {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+body.theme-light .import-section,
+body.theme-light .status-check-container,
+body.theme-light .dashboard-section,
+body.theme-light .card {
+  background-color: #f8fafc !important;
+  color: #1f2937 !important;
+}
+
+/* Force all text elements to inherit theme colors */
+.import-container *,
+.data-dashboard-container *,
+.settings-dashboard-container *,
+.status-dashboard-container * {
+  color: inherit !important;
+}
+
+/* Override any remaining hardcoded styles */
+.tabs button {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+.tabs button.active,
+.tabs button:hover {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+/* ===== SPECIFIC THEME COLOR SCHEMES ===== */
+
+/* Light Theme */
+body.theme-light {
+  --theme-primary: #667eea;
+  --theme-secondary: #764ba2;
+  --theme-background: #ffffff;
+  --theme-surface: #f8fafc;
+  --theme-text: #1f2937;
+  --theme-accent: #50e3c2;
+}
+
+/* Dark Theme */
+body.theme-dark {
+  --theme-primary: #4c51bf;
+  --theme-secondary: #8b5cf6;
+  --theme-background: #111827;
+  --theme-surface: #1f2937;
+  --theme-text: #f9fafb;
+  --theme-accent: #a78bfa;
+}
+
+/* Ocean Blue Theme */
+body.theme-ocean {
+  --theme-primary: #0ea5e9;
+  --theme-secondary: #0284c7;
+  --theme-background: #0f172a;
+  --theme-surface: #1e293b;
+  --theme-text: #f1f5f9;
+  --theme-accent: #38bdf8;
+}
+
+/* Forest Green Theme */
+body.theme-forest {
+  --theme-primary: #059669;
+  --theme-secondary: #047857;
+  --theme-background: #0f1419;
+  --theme-surface: #1f2937;
+  --theme-text: #f0fdf4;
+  --theme-accent: #34d399;
+}
+
+/* Sunset Orange Theme */
+body.theme-sunset {
+  --theme-primary: #ea580c;
+  --theme-secondary: #dc2626;
+  --theme-background: #1a0b08;
+  --theme-surface: #292524;
+  --theme-text: #fef7ff;
+  --theme-accent: #fb923c;
+}
+
+/* Royal Purple Theme */
+body.theme-royal {
+  --theme-primary: #7c3aed;
+  --theme-secondary: #6d28d9;
+  --theme-background: #0f0a1a;
+  --theme-surface: #1e1b3b;
+  --theme-text: #f8fafc;
+  --theme-accent: #a855f7;
+}
+
+/* ===== DATA VIEWS THEME STYLING ===== */
+.data-views .list-group-item {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.data-views .list-group-item:hover {
+  background-color: var(--theme-secondary) !important;
+}
+
+.data-views .list-group-item.active {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+/* ===== MESSAGE BUBBLES THEME STYLING ===== */
+.message-bubble {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.message-bubble.user {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+.message-bubble.assistant {
+  background-color: var(--theme-accent) !important;
+  color: white !important;
+}
+
+/* ===== MODAL THEME STYLING ===== */
+.modal-content {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+.modal-header {
+  border-bottom-color: var(--theme-secondary) !important;
+}
+
+.modal-footer {
+  border-top-color: var(--theme-secondary) !important;
+}
+
+/* ===== FORCE OVERRIDE FOR STUBBORN ELEMENTS ===== */
+/* Use !important to override any conflicting styles */
+body.theme-ocean *,
+body.theme-forest *,
+body.theme-sunset *,
+body.theme-royal * {
+  /* Ensure text color inheritance */
+  color: inherit;
+}
+
+/* Force sidebar background for all themes */
+body.theme-ocean .threads-sidebar,
+body.theme-forest .threads-sidebar,
+body.theme-sunset .threads-sidebar,
+body.theme-royal .threads-sidebar,
+body.theme-dark .threads-sidebar,
+body.theme-light .threads-sidebar {
+  background: var(--theme-surface) !important;
+}
+
+/* AGGRESSIVE CARD OVERRIDES - Force all cards in sidebar to use theme colors */
+body.theme-ocean .threads-sidebar .card,
+body.theme-forest .threads-sidebar .card,
+body.theme-sunset .threads-sidebar .card,
+body.theme-royal .threads-sidebar .card,
+body.theme-dark .threads-sidebar .card,
+body.theme-light .threads-sidebar .card,
+body.theme-ocean .threads-sidebar .card-body,
+body.theme-forest .threads-sidebar .card-body,
+body.theme-sunset .threads-sidebar .card-body,
+body.theme-royal .threads-sidebar .card-body,
+body.theme-dark .threads-sidebar .card-body,
+body.theme-light .threads-sidebar .card-body {
+  background: var(--theme-surface) !important;
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* AGGRESSIVE LIST GROUP OVERRIDES */
+body.theme-ocean .threads-sidebar .list-group-item,
+body.theme-forest .threads-sidebar .list-group-item,
+body.theme-sunset .threads-sidebar .list-group-item,
+body.theme-royal .threads-sidebar .list-group-item,
+body.theme-dark .threads-sidebar .list-group-item,
+body.theme-light .threads-sidebar .list-group-item {
+  background: var(--theme-surface) !important;
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* AGGRESSIVE NAV TABS OVERRIDES */
+body.theme-ocean .threads-sidebar .nav-link,
+body.theme-forest .threads-sidebar .nav-link,
+body.theme-sunset .threads-sidebar .nav-link,
+body.theme-royal .threads-sidebar .nav-link,
+body.theme-dark .threads-sidebar .nav-link,
+body.theme-light .threads-sidebar .nav-link {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--theme-text) !important;
+}
+
+/* Override any Bootstrap default card styling */
+.card.h-100,
+.card.full-height,
+.card.card-design,
+.card.subtle {
+  background: var(--theme-surface) !important;
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* ===== FINAL NUCLEAR OPTION - OVERRIDE EVERYTHING ===== */
+/* These rules have maximum specificity to override any stubborn styles */
+
+/* DEBUG: Apply red border to see if theme classes are working */
+/* body.theme-ocean { border: 2px solid red !important; }
+body.theme-forest { border: 2px solid green !important; }
+body.theme-sunset { border: 2px solid orange !important; }
+body.theme-royal { border: 2px solid purple !important; } */
+
+/* Force all elements within threads-sidebar to inherit theme colors */
+.threads-sidebar,
+.threads-sidebar *,
+.threads-sidebar .card,
+.threads-sidebar .card *,
+.threads-sidebar .card-body,
+.threads-sidebar .card-body *,
+.threads-sidebar .list-group,
+.threads-sidebar .list-group *,
+.threads-sidebar .nav-tabs,
+.threads-sidebar .nav-tabs *,
+.threads-sidebar .card-design,
+.threads-sidebar .full-height,
+.threads-sidebar .h-100,
+.threads-sidebar .subtle {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+/* ULTRA SPECIFIC SELECTORS FOR EACH THEME */
+body.theme-ocean .threads-sidebar,
+body.theme-ocean .threads-sidebar .card,
+body.theme-ocean .threads-sidebar .card-body,
+body.theme-ocean .threads-sidebar .card-design {
+  background-color: #1e293b !important; /* Ocean surface color */
+  color: #f1f5f9 !important; /* Ocean text color */
+}
+
+body.theme-ocean .import-container,
+body.theme-ocean .data-dashboard-container,
+body.theme-ocean .settings-dashboard-container,
+body.theme-ocean .status-dashboard-container,
+body.theme-ocean .main-content,
+body.theme-ocean .chat-content-wrapper,
+body.theme-ocean .conversation-card,
+body.theme-ocean .full-height-content {
+  background-color: #0f172a !important; /* Ocean background */
+  color: #f1f5f9 !important; /* Ocean text */
+}
+
+body.theme-forest .threads-sidebar,
+body.theme-forest .threads-sidebar .card,
+body.theme-forest .threads-sidebar .card-body,
+body.theme-forest .threads-sidebar .card-design {
+  background-color: #1f2937 !important; /* Forest surface color */
+  color: #f0fdf4 !important; /* Forest text color */
+}
+
+body.theme-forest .import-container,
+body.theme-forest .data-dashboard-container,
+body.theme-forest .settings-dashboard-container,
+body.theme-forest .status-dashboard-container,
+body.theme-forest .main-content,
+body.theme-forest .chat-content-wrapper,
+body.theme-forest .conversation-card,
+body.theme-forest .full-height-content {
+  background-color: #0f1419 !important; /* Forest background */
+  color: #f0fdf4 !important; /* Forest text */
+}
+
+body.theme-sunset .threads-sidebar,
+body.theme-sunset .threads-sidebar .card,
+body.theme-sunset .threads-sidebar .card-body,
+body.theme-sunset .threads-sidebar .card-design {
+  background-color: #292524 !important; /* Sunset surface color */
+  color: #fef7ff !important; /* Sunset text color */
+}
+
+body.theme-sunset .import-container,
+body.theme-sunset .data-dashboard-container,
+body.theme-sunset .settings-dashboard-container,
+body.theme-sunset .status-dashboard-container,
+body.theme-sunset .main-content,
+body.theme-sunset .chat-content-wrapper,
+body.theme-sunset .conversation-card,
+body.theme-sunset .full-height-content {
+  background-color: #1a0b08 !important; /* Sunset background */
+  color: #fef7ff !important; /* Sunset text */
+}
+
+body.theme-royal .threads-sidebar,
+body.theme-royal .threads-sidebar .card,
+body.theme-royal .threads-sidebar .card-body,
+body.theme-royal .threads-sidebar .card-design {
+  background-color: #1e1b3b !important; /* Royal surface color */
+  color: #f8fafc !important; /* Royal text color */
+}
+
+body.theme-royal .import-container,
+body.theme-royal .data-dashboard-container,
+body.theme-royal .settings-dashboard-container,
+body.theme-royal .status-dashboard-container,
+body.theme-royal .main-content,
+body.theme-royal .chat-content-wrapper,
+body.theme-royal .conversation-card,
+body.theme-royal .full-height-content {
+  background-color: #0f0a1a !important; /* Royal background */
+  color: #f8fafc !important; /* Royal text */
+}
+
+body.theme-dark .threads-sidebar,
+body.theme-dark .threads-sidebar .card,
+body.theme-dark .threads-sidebar .card-body,
+body.theme-dark .threads-sidebar .card-design {
+  background-color: #1f2937 !important; /* Dark surface color */
+  color: #f9fafb !important; /* Dark text color */
+}
+
+body.theme-dark .import-container,
+body.theme-dark .data-dashboard-container,
+body.theme-dark .settings-dashboard-container,
+body.theme-dark .status-dashboard-container,
+body.theme-dark .main-content,
+body.theme-dark .chat-content-wrapper,
+body.theme-dark .conversation-card,
+body.theme-dark .full-height-content {
+  background-color: #111827 !important; /* Dark background */
+  color: #f9fafb !important; /* Dark text */
+}
+
+body.theme-light .threads-sidebar,
+body.theme-light .threads-sidebar .card,
+body.theme-light .threads-sidebar .card-body,
+body.theme-light .threads-sidebar .card-design {
+  background-color: #f8fafc !important; /* Light surface color */
+  color: #1f2937 !important; /* Light text color */
+}
+
+body.theme-light .import-container,
+body.theme-light .data-dashboard-container,
+body.theme-light .settings-dashboard-container,
+body.theme-light .status-dashboard-container,
+body.theme-light .main-content,
+body.theme-light .chat-content-wrapper,
+body.theme-light .conversation-card,
+body.theme-light .full-height-content {
+  background-color: #ffffff !important; /* Light background */
+  color: #1f2937 !important; /* Light text */
+}
+
+/* Exceptions for active/hover states */
+.threads-sidebar .nav-link.active,
+.threads-sidebar .list-group-item.active {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+.threads-sidebar .nav-link:hover,
+.threads-sidebar .list-group-item:hover {
+  background-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Exception for transparent backgrounds */
+.threads-sidebar .nav-link:not(.active) {
+  background-color: transparent !important;
+}
+
+/* Force button styling */
+.threads-sidebar .btn,
+.threads-sidebar .new-thread-button {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent)) !important;
+  color: white !important;
+  border-color: var(--theme-primary) !important;
+}
+
+/* ===== ADDITIONAL COMPONENT-SPECIFIC SELECTORS ===== */
+/* Target specific elements that might not be caught by general selectors */
+
+/* Data Dashboard specific elements */
+.data-dashboard,
+.stats-container,
+.stat-card,
+.collections-header,
+.collection-actions,
+.sources-list,
+.source-item {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Stat cards should use surface color */
+.stat-card {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* Import component specific elements */
+.import-section,
+.upload-area,
+.file-list,
+.status-section {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* Settings component specific elements */
+.settings-section,
+.settings-form,
+.form-group {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Override for all themes - main content areas */
+body.theme-sunset .data-dashboard,
+body.theme-sunset .stats-container,
+body.theme-sunset .stat-card,
+body.theme-ocean .data-dashboard,
+body.theme-ocean .stats-container, 
+body.theme-ocean .stat-card,
+body.theme-forest .data-dashboard,
+body.theme-forest .stats-container,
+body.theme-forest .stat-card,
+body.theme-royal .data-dashboard,
+body.theme-royal .stats-container,
+body.theme-royal .stat-card,
+body.theme-dark .data-dashboard,
+body.theme-dark .stats-container,
+body.theme-dark .stat-card {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}

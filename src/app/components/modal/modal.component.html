@@ -1,0 +1,23 @@
+<h1>{{title}}</h1>
+
+<div *ngIf="type=='Rename Thread'">
+  <div style="margin-top: 15px">
+    <input type="text" class="form-control" [(ngModel)]="newThreadName" />
+  </div>
+  <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+    <button class="btn btn-secondary me-2" (click)="closeModal()">Cancel</button>
+    <button class="btn btn-primary" (click)="updateThreadName()">Save</button>
+  </div>
+</div>
+
+<div *ngIf="type=='Delete Thread'">
+  <div style="margin-top: 15px">
+    <p>You will no longer see this conversation in your thread list. This will also delete related activity like
+      prompts, responses and feedback from your AI Assistant activity.</p>
+  </div>
+  <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+    <button class="btn btn-secondary me-2" (click)="closeModal()">Cancel</button>
+    <button class="btn btn-danger" (click)="deleteThread()">Delete</button>
+  </div>
+</div>
+

@@ -1,0 +1,14 @@
+services:
+  novus-chat:
+    build:
+      context: .
+      secrets:
+        - npmrc
+    container_name: novus-chat-container
+    ports:
+      - "4200:80"
+    restart: unless-stopped
+
+secrets:
+  npmrc:
+    file: .npmrc

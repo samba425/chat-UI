@@ -1,0 +1,53 @@
+<div class="document-list-page">
+      <div class="header">
+        <div class="breadcrumbs">
+          <span (click)="goBack()">Data Dashboard</span>
+          <span class="separator">></span>
+          <span class="current-page">Documents</span>
+        </div>
+        <div class="actions">
+          <button class="active">Table</button>
+          <button>Metadata</button>
+          <button>Configuration</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search Documents" />
+        <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>document_id</th>
+              <th>document_type</th>
+              <th>title</th>
+              <th>content</th>
+              <th>author</th>
+              <th>created_date</th>
+              <th>department</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documents; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ doc.document_id }}</td>
+              <td>{{ doc.document_type }}</td>
+              <td>{{ doc.title }}</td>
+              <td>{{ doc.content }}</td>
+              <td>{{ doc.author }}</td>
+              <td>{{ doc.created_date | date:'yyyy-MM-ddTHH:mm:ssZ' }}</td>
+              <td>{{ doc.department }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span>Page 1 of 3</span>
+        <div class="page-nav">
+          <button>&lt;</button>
+          <button>&gt;</button>
+        </div>
+      </div>
+    </div>

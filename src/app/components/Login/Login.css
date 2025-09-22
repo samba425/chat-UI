@@ -1,0 +1,79 @@
+@font-face {
+    font-family: 'CiscoSansTTRegular';
+    src: url('/src/fonts/CiscoSans/CiscoSansTTRegular.ttf') format('truetype');
+}
+
+* {
+    font-family: 'CiscoSansTTRegular', sans-serif;
+}
+
+.Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../../assets/BG@2x.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.LoginBox {
+    width: 400px;
+    height: 500px; /* Reduce the height */
+    background: transparent linear-gradient(180deg, #D0F0FD 0%, #FBFCFE 50%, #FFFFFF 100%) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 13px 16px #B7D7EB8E;
+    border-radius: 60px;
+    opacity: 1;
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.logoContainer img {
+    width: 250px; /* Make the login_top image smaller */
+    height: auto;
+    margin-bottom: 50px; /* Adjust margin to fit smaller box */
+}
+
+.labelinput {
+    display: block;
+    margin: 5px 0 5px;
+    font-weight: bold;
+    color: #212529;
+    font-size: 12px; /* Make the labels smaller */
+    text-align: left;
+    width: 100%;
+    margin-left: 30px; /* Set left margin to 30px */
+}
+
+.textinput {
+    width: calc(100% - 32px); /* Reduce the width by two tab spaces */
+    padding: 8px;
+    margin-bottom: 20px; /* Adjust margin to fit smaller box */
+    border: 1px solid #B8B9B9; /* Black border */
+    border-radius: 5px;
+    background: transparent; /* Transparent background */
+    color: #212529;
+    font-size: 12px; /* Make the text input smaller */
+    margin-left: 0; /* Set left margin to zero */
+}
+
+.submitbutton {
+    width: calc(100% - 32px); /* Reduce the width by two tab spaces */
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background: #017CAD;
+    color: white;
+    font-size: 14px; /* Make the button text smaller */
+    cursor: pointer;
+}
+
+.bottomImage {
+    margin-top: 20px; /* Adjust margin to fit smaller box */
+    width: 80px;
+    height: 70px;
+}

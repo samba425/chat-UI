@@ -1,0 +1,112 @@
+<div class="status-dashboard" [class.dark]="isDarkMode$ | async">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <p>Real-time monitoring of document processing pipeline</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="refresh-btn" (click)="refreshData()" [disabled]="loading$ | async">
+      Refresh Now
+    </button>
+    <div class="auto-refresh">
+      <label>
+        <input type="checkbox" [(ngModel)]="autoRefresh" (change)="toggleAutoRefresh()">
+        Auto-refresh every 30 seconds
+      </label>
+    </div>
+    <div class="last-updated" *ngIf="lastUpdated$ | async as lastUpdated">
+      Last updated: {{ formatTime(lastUpdated) }}
+    </div>
+  </div>
+
+  <!-- Error Display -->
+  <div *ngIf="error$ | async as error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="loading">
+    Loading events...
+  </div>
+
+  <!-- Status Overview Cards -->
+  <div class="status-overview" *ngIf="!(loading$ | async)">
+    <div class="status-card completed">
+      <h3>Completed</h3>
+      <div class="count">{{ (statusCounts$ | async)?.completed || 0 }}</div>
+      <div>Documents</div>
+    </div>
+    <div class="status-card in-progress">
+      <h3>In Progress</h3>
+      <div class="count">{{ (statusCounts$ | async)?.in_progress || 0 }}</div>
+      <div>Documents</div>
+    </div>
+    <div class="status-card failed">
+      <h3>Failed</h3>
+      <div class="count">{{ (statusCounts$ | async)?.failed || 0 }}</div>
+      <div>Documents</div>
+    </div>
+    <div class="status-card pending">
+      <h3>Pending</h3>
+      <div class="count">{{ (statusCounts$ | async)?.pending || 0 }}</div>
+      <div>Documents</div>
+    </div>
+  </div>
+
+  <!-- Events Section -->
+  <div class="events-section" *ngIf="!(loading$ | async)">
+    <h2 class="section-title">📄 Recent Processing Events</h2>
+    
+    <div *ngIf="(events$ | async) as events">
+      <div class="events-grid" *ngIf="events.length > 0">
+        <div *ngFor="let event of events.slice(0, 10)" class="event-card">
+        
+        <!-- Event Header -->
+        <div class="event-header">
+          <div class="event-id">{{ event.event_id }}</div>
+          <div class="event-status" [ngClass]="event.overall_status">
+            {{ event.overall_status.replace('_', ' ') }}
+          </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [ngClass]="{ 'failed': event.overall_status === 'failed' }"
+            [style.width.%]="event.progress_percentage || 0">
+          </div>
+        </div>
+        
+        <!-- Progress Details -->
+        <div class="progress-details">
+          <span><strong>Progress:</strong> {{ event.progress_percentage || 0 }}%</span>
+          <span><strong>Current:</strong> {{ STAGE_NAMES[event.current_stage] || event.current_stage }}</span>
+        </div>
+        
+        <!-- Stage Timeline -->
+        <div class="stage-timeline">
+          <div 
+            *ngFor="let stage of (STAGE_NAMES | keyvalue: originalOrder)" 
+            class="stage-item" 
+            [ngClass]="getStageStatus(event.event_id, stage.key)"
+            [title]="stage.value + ': ' + getStageStatus(event.event_id, stage.key)">
+            {{ stage.value }}
+          </div>
+        </div>
+        
+        <!-- Event Metadata -->
+        <div class="event-metadata">
+          <div><strong>Created:</strong> {{ formatDate(event.created_at) }}</div>
+          <div><strong>Updated:</strong> {{ formatDate(event.updated_at) }}</div>
+          <div *ngIf="event.last_error" class="error-text">
+            <strong>Error:</strong> {{ event.last_error }}
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="events.length === 0" class="no-events">No events found</div>
+    </div>
+  </div>
+</div>

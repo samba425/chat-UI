@@ -1,0 +1,287 @@
+/* ===== GLOBAL STYLES (NON-THEME SPECIFIC) ===== */
+/* These styles are not theme-dependent and should remain consistent */
+
+/* Always dark header styling - Override theme colors for header */
+.magnetic-dark {
+  background: #23272f !important;
+  color: #ffffff !important;
+  padding: 0px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 1px solid #333 !important;
+  z-index: 99999;
+}
+
+.navbar-dark {
+  background-color: #1e293b !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-text,
+.navbar-dark .header-heading-title {
+  color: #ffffff !important;
+}
+
+/* Bootstrap component theme overrides */
+.btn-primary {
+  background-color: var(--theme-primary) !important;
+  border-color: var(--theme-primary) !important;
+}
+
+.btn-secondary {
+  background-color: var(--theme-secondary) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+.card {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-secondary) !important;
+  color: var(--theme-text) !important;
+}
+
+.navbar-dark {
+  background-color: var(--theme-surface) !important;
+}
+
+/* Always dark header styling */
+.magnetic-dark {
+  background: #23272f !important;
+  color: #ffffff !important;
+  padding: 0px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 1px solid #333 !important;
+  z-index: 99999;
+}
+
+.navbar-dark {
+  background-color: #1e293b !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-text,
+.navbar-dark .header-heading-title {
+  color: #ffffff !important;
+}
+/* Fix chat footer to be sticky at the bottom of chat area */
+.chat-area {
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  min-height: 0;
+}
+
+.messages-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+  max-height: 100%;
+}
+
+/* Remove overflow from .content-container if present */
+.content-container {
+  /* No overflow property here. Only flex-grow and height. */
+  flex-grow: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+.main-content {
+  min-height: 0;
+}
+
+.conversation-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  /* Remove position: relative to allow sticky footer */
+}
+
+.chat-content-wrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* Remove position: relative and padding-bottom */
+}
+
+.chat-footer {
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  z-index: 2;
+  padding-bottom: 0.5rem;
+}
+/* Dark mode: thread list item hover */
+.page-container.dark-mode .threads-sidebar .thread-list-item:hover .thread-list-content {
+  background: #4b5563 !important;
+  color: #fff !important;
+  /* border: 2px solid #fff !important; */
+}
+
+/* Dark mode: input fields */
+.page-container.dark-mode input,
+.page-container.dark-mode textarea,
+.page-container.dark-mode [pol-textarea],
+.page-container.dark-mode .cm-ai-footer-input {
+  /* background: #23272f !important; */
+  background: #4b5563 !important;
+  color: #fff !important;
+  /* border: 1px solid #fff !important; */
+  caret-color: #fff !important;
+}
+/* Dark mode: active thread in sidebar */
+.page-container.dark-mode .threads-sidebar .thread-list-content.active {
+  background: #4b5563 !important;
+  /* border: 2px solid #fff !important; */
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+/* Force chat history active card to be dark in dark mode */
+.page-container.dark-mode .chat-history .message-wrapper.active,
+.page-container.dark-mode .chat-history .message-wrapper .thread-list-content.active {
+  border: 2px solid #fff !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px #fff33a33 !important;
+}
+/* Dark mode: active message in chat history and message card border */
+.page-container.dark-mode .chat-history .message-wrapper .thread-list-content.active,
+.page-container.dark-mode .chat-history .message-wrapper.active,
+.page-container.dark-mode .cm-user-message.active,
+.page-container.dark-mode .cm-ai-response-container.active {
+  /* background: #23272f !important; */
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 0 2px #fff33a33 !important;
+}
+
+.page-container.dark-mode .cm-user-message,
+.page-container.dark-mode .cm-ai-response-container {
+  border: 2px solid #fff !important;
+  border-radius: 8px !important;
+}
+/* Dark mode for message cards and chat history */
+.page-container.dark-mode .cm-user-message,
+.page-container.dark-mode .cm-ai-response-container,
+.page-container.dark-mode .chat-history {
+  /* background: #23272f !important; */
+  color: #fff !important;
+  border-color: #333 !important;
+}
+.page-container.dark-mode,
+.page-container.dark-mode * {
+  color: #fff !important;
+}
+/* Light mode (default) */
+.page-container {
+  background: #f5f6fa;
+  color: #222;
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Dark mode */
+.page-container.dark-mode {
+  background: #181a20;
+  color: #f5f6fa;
+}
+
+/* Example: make pol-card and chat area adapt to theme */
+
+.page-container.dark-mode pol-card,
+.page-container.dark-mode .pol-card {
+  background: #23272f !important;
+  color: #fff !important;
+  border-color: #333 !important;
+  background-image: url("/assets/N-bg.png") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+.page-container.dark-mode .conversation-card {
+  background: #23272f !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+
+.page-container.dark-mode .main-content,
+.page-container.dark-mode .chat-area {
+  background: transparent;
+}
+
+.page-container .main-content,
+.page_container .chat-area {
+  background: transparent;
+}
+
+/* Page container theme overrides */
+.page-container {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Chat content area theme overrides */
+.chat-content-wrapper,
+.main-content {
+  background-color: var(--theme-background) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Messages container theme overrides */
+.messages-container {
+  background-color: var(--theme-background) !important;
+}
+
+/* Chat footer theme overrides */
+.chat-footer {
+  background-color: var(--theme-surface) !important;
+  border-top-color: var(--theme-secondary) !important;
+}
+
+/* Form inputs theme overrides */
+.cm-ai-footer-input,
+.form-control {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+  border-color: var(--theme-secondary) !important;
+}
+
+/* Sidebar theme overrides */
+.threads-sidebar {
+  background-color: var(--theme-surface) !important;
+}
+
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css';
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cdk-overlay-pane {
+  position: static;
+  padding: 1%;
+  border-radius: 10px;
+}
+
+
+.pol-toast-group {
+    margin-top: 5% !important;
+}

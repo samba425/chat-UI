@@ -1,0 +1,121 @@
+
+.document-list-page {
+    padding: 20px;
+    height: 100%;
+  }
+  
+  .dark-mode .document-list-page {
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+  
+  .dark-mode .header {
+    color: #fff;
+  }
+  
+  .dark-mode .actions button {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+  }
+  
+  .dark-mode .actions button.active {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .dark-mode .search-bar input {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+  }
+  
+  .dark-mode .search-bar button {
+    background-color: #007bff;
+  }
+  
+  .dark-mode table {
+    color: #fff;
+  }
+  
+  .dark-mode th, .dark-mode td {
+    border-bottom: 1px solid #333;
+  }
+  
+  .dark-mode th {
+    color: #aaa;
+  }
+  
+  .dark-mode .page-nav button {
+    border: 1px solid #555;
+    color: #fff;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+  .breadcrumbs span:first-child {
+    cursor: pointer;
+  }
+  .breadcrumbs .separator {
+    margin: 0 10px;
+  }
+  .breadcrumbs .current-page {
+    font-weight: bold;
+  }
+  .actions button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  .search-bar {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  .search-bar input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+  }
+  .search-bar button {
+    border: none;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  .table-container {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  th {
+    font-weight: bold;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .page-nav button {
+    background: none;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+    

@@ -1,0 +1,85 @@
+<div class="import-container" [class.dark]="isDarkMode$ | async">
+    <div class="dashboard-header">
+    <p>Upload & Status Check</p>
+  </div>
+
+
+  <!-- File Import Section -->
+  <div class="import-section">
+    <!-- Initial View: Drag and drop, file selection, and import form -->
+    <div *ngIf="!(isImporting$ | async) && !(importComplete$ | async)">
+      <div 
+        class="drop-zone" 
+        (click)="fileInput.click()" 
+        (dragover)="onDragOver($event)" 
+        (dragleave)="onDragLeave($event)" 
+        (drop)="onDrop($event)"
+        [class.dragover]="isDragOver">
+        <input type="file" #fileInput class="file-input" (change)="onFileChange($event)">
+        <div class="drop-zone-content">
+          <div class="drop-zone-icon">
+            <i class="bi bi-upload" style="font-size: 48px;"></i>
+          </div>
+          <div class="drop-zone-text">
+            <p>Drag & drop your file here</p>
+            <p>or <a>browse files</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedFile$ | async as selectedFile" class="file-info">
+        Selected file: {{ selectedFile.name }}
+      </div>
+
+      <form [formGroup]="importForm" (ngSubmit)="onImport()" class="import-form">
+        <!-- <div class="form-group">
+          <label for="chunkSize">Chunk Size</label>
+          <input type="number" id="chunkSize" formControlName="chunkSize">
+        </div> -->
+        <button type="submit" class="import-button" [disabled]="!importForm.valid || !(selectedFile$ | async)">Import</button>
+      </form>
+    </div>
+
+    <!-- Progress/Completed View: Status, progress bar, and logs -->
+    <div *ngIf="(isImporting$ | async) || (importComplete$ | async)" class="import-status">
+      <h3>{{ (isImporting$ | async) ? 'Importing File...' : 'Import Accepted' }}</h3>
+      <div *ngIf="selectedFile$ | async as selectedFile" class="file-info">
+        {{ selectedFile.name }}
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="progress$ | async">
+            {{ (progress$ | async) }}%
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="importComplete$ | async" class="import-result">
+        <h4>Import Queued</h4>
+        <div class="result-item">
+          <strong>Event ID:</strong> <span>{{ taskId$ | async }}</span>
+        </div>
+        <p class="copy-note">You can use the Event ID below to check the status.</p>
+      </div>
+      <button *ngIf="isImporting$ | async" class="import-button cancel-button" (click)="cancelImport()">Cancel</button>
+      <button *ngIf="importComplete$ | async" class="import-button" (click)="reset()">Import Another File</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Task Status View -->
+  <div class="status-check-container">
+    <h3>Check Task Status</h3>
+    <div class="form-group">
+      <label for="taskId">Task ID</label>
+      <input type="text" id="taskId" [(ngModel)]="statusTaskId" placeholder="Paste Task ID here">
+    </div>
+    <button class="import-button" (click)="checkStatus()" [disabled]="!statusTaskId">Check Status</button>
+
+    <div *ngIf="taskStatus$ | async as status" class="task-status-info">
+      <h4>Task Status</h4>
+      <pre>{{ status | json }}</pre>
+    </div>
+  </div>
+</div>

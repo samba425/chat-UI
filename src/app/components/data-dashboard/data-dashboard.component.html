@@ -1,0 +1,62 @@
+<div class="data-dashboard-container" [class.dark]="isDarkMode$ | async">
+
+  <div *ngIf="activeView === 'dashboard'" class="data-dashboard">
+      <div class="dashboard-header">
+     <p class="dashboard-title">Data Dashboard</p>
+  </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-database"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ dataSourcesCount }}</div>
+          <div class="stat-label">Data Sources</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-box"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">{{ dataObjectsCount | number }}</div>
+          <div class="stat-label">Data Objects</div>
+        </div>
+      </div>
+    </div>
+    <div class="collections-header">
+      <h2>Collections</h2>
+      <div class="collection-actions">
+        <button class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+        <button class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-down-up"></i>
+        </button>
+        <button class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-funnel"></i>
+        </button>
+      </div>
+    </div>
+    <div class="source-section">
+      <h3 (click)="toggleAccordion()">Available Sources ({{ availableSources.length }}) 
+        <i class="bi" [ngClass]="isAccordionOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+      </h3>
+      <div *ngIf="isAccordionOpen" class="available-sources-list">
+        <div *ngFor="let source of availableSources" class="source-item incident-hover" (click)="onSourceClick(source)">
+          <div class="source-details">
+            <span class="source-type">{{ source.source }}</span>
+            <span class="source-name">{{ source.name }}</span>
+            <span *ngIf="source.description" class="source-desc">{{ source.description }}</span>
+            <span *ngIf="source.type" class="source-type-detail">Type: {{ source.type }}</span>
+            <span class="badge">{{ source.objects }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="activeView === 'import'">
+    <app-import-data></app-import-data>
+  </div>
+</div>
