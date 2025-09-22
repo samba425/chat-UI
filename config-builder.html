@@ -220,6 +220,30 @@
                         <div class="help-text">Usually: {baseUrl}/query/stream</div>
                     </div>
                 </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="historyApiUrl">History API URL</label>
+                        <input type="url" id="historyApiUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/history</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="templateApiUrl">Template API URL</label>
+                        <input type="url" id="templateApiUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/api/v1/template</div>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="feedbackApiUrl">Feedback API URL</label>
+                        <input type="url" id="feedbackApiUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/api/v1/feedback</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fallbackApiBaseUrl">Fallback API URL (Optional)</label>
+                        <input type="url" id="fallbackApiBaseUrl" placeholder="Backup API endpoint">
+                        <div class="help-text">Backup endpoint if primary fails</div>
+                    </div>
+                </div>
             </details>
         </div>
 
@@ -290,6 +314,119 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Step 4: API Response Mapping -->
+        <div class="step-header">
+            🔄 Step 4: API Response Mapping (Advanced)
+        </div>
+        <div class="step-content">
+            <details>
+                <summary style="cursor: pointer; font-weight: 600; color: #6366f1; margin-bottom: 15px;">
+                    📡 Configure Response Formats for Different Services
+                </summary>
+                <div style="background: #e0f2fe; border: 2px solid #0288d1; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                    <h4 style="color: #0277bd; margin-top: 0;">💡 Why Response Mapping?</h4>
+                    <p style="color: #0277bd; margin-bottom: 0;">Different AI services return responses in different formats. Configure how your app should handle these variations.</p>
+                </div>
+
+                <!-- Chat Response Mapping -->
+                <h4 style="color: #6366f1; margin-bottom: 15px;">💬 Chat Response Mapping</h4>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="chatResponseType">Response Type</label>
+                        <select id="chatResponseType" onchange="updateResponseMappingFields()">
+                            <option value="streaming">Streaming (Server-Sent Events)</option>
+                            <option value="json">Standard JSON Response</option>
+                            <option value="custom">Custom Format</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="responseContentField">Content Field Path</label>
+                        <input type="text" id="responseContentField" placeholder="result" value="result">
+                        <div class="help-text">Path to message content in response (e.g., "result", "data.message", "response.text")</div>
+                    </div>
+                </div>
+
+                <div id="streamingOptions" style="display: block;">
+                    <h5 style="color: #7c3aed;">🌊 Streaming Configuration</h5>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="streamChunkField">Chunk Field</label>
+                            <input type="text" id="streamChunkField" placeholder="chunk" value="chunk">
+                            <div class="help-text">Field containing streaming text chunks</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="streamCompleteField">Complete Field</label>
+                            <input type="text" id="streamCompleteField" placeholder="synthesis" value="synthesis">
+                            <div class="help-text">Field containing final complete response</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thread/History Response Mapping -->
+                <h4 style="color: #6366f1; margin-bottom: 15px;">📜 Threads/History Response Mapping</h4>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="threadsArrayField">Threads Array Field</label>
+                        <input type="text" id="threadsArrayField" placeholder="threads" value="threads">
+                        <div class="help-text">Path to threads array (e.g., "threads", "data.threads", "items")</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="messagesArrayField">Messages Array Field</label>
+                        <input type="text" id="messagesArrayField" placeholder="messages" value="messages">
+                        <div class="help-text">Path to messages array (e.g., "messages", "data.messages", "history")</div>
+                    </div>
+                </div>
+
+                <!-- Field Mappings -->
+                <h4 style="color: #6366f1; margin-bottom: 15px;">🏷️ Field Mappings</h4>
+                <div style="background: #f8fafc; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="threadIdField">Thread ID Field</label>
+                            <input type="text" id="threadIdField" placeholder="_id" value="_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="threadNameField">Thread Name Field</label>
+                            <input type="text" id="threadNameField" placeholder="name" value="name">
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="messageContentField">Message Content Field</label>
+                            <input type="text" id="messageContentField" placeholder="content" value="content">
+                        </div>
+                        <div class="form-group">
+                            <label for="messageSenderField">Message Sender Field</label>
+                            <input type="text" id="messageSenderField" placeholder="sender" value="sender">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Handling -->
+                <h4 style="color: #6366f1; margin-bottom: 15px;">⚠️ Error Handling</h4>
+                <div class="grid">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableFallbackApi" onchange="toggleFallbackOptions()">
+                        <label for="enableFallbackApi">Enable Fallback API</label>
+                        <div class="help-text">Use backup API if primary fails</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableRetryLogic" checked>
+                        <label for="enableRetryLogic">Enable Retry Logic</label>
+                        <div class="help-text">Automatically retry failed requests</div>
+                    </div>
+                </div>
+
+                <div id="fallbackOptions" style="display: none;">
+                    <div class="form-group">
+                        <label for="maxRetries">Max Retries</label>
+                        <input type="number" id="maxRetries" value="3" min="1" max="10">
+                        <div class="help-text">Number of retry attempts before using fallback</div>
+                    </div>
+                </div>
+            </details>
         </div>
 
         <!-- Preview & Output -->
@@ -421,10 +558,32 @@
             const secondaryColor = document.getElementById('secondaryColor').value;
             const baseUrl = document.getElementById('baseUrl').value;
             
+            // Get all endpoint URLs (use custom values or auto-generate from base URL)
             const authTokenUrl = document.getElementById('authTokenUrl').value || `${baseUrl}/auth/login`;
             const authRegisterUrl = document.getElementById('authRegisterUrl').value || `${baseUrl}/auth/register`;
             const chatApiBaseUrl = document.getElementById('chatApiBaseUrl').value || `${baseUrl}/api/v1`;
             const netqueryApiUrl = document.getElementById('netqueryApiUrl').value || `${baseUrl}/query/stream`;
+            const historyApiUrl = document.getElementById('historyApiUrl').value || `${baseUrl}/history`;
+            const templateApiUrl = document.getElementById('templateApiUrl').value || `${baseUrl}/api/v1/template`;
+            const feedbackApiUrl = document.getElementById('feedbackApiUrl').value || `${baseUrl}/api/v1/feedback`;
+            const fallbackApiBaseUrl = document.getElementById('fallbackApiBaseUrl').value;
+
+            // Get response mapping configuration
+            const responseMapping = {
+                chatResponseType: document.getElementById('chatResponseType')?.value || 'streaming',
+                responseContentField: document.getElementById('responseContentField')?.value || 'result',
+                streamChunkField: document.getElementById('streamChunkField')?.value || 'chunk',
+                streamCompleteField: document.getElementById('streamCompleteField')?.value || 'synthesis',
+                threadsArrayField: document.getElementById('threadsArrayField')?.value || 'threads',
+                messagesArrayField: document.getElementById('messagesArrayField')?.value || 'messages',
+                threadIdField: document.getElementById('threadIdField')?.value || '_id',
+                threadNameField: document.getElementById('threadNameField')?.value || 'name',
+                messageContentField: document.getElementById('messageContentField')?.value || 'content',
+                messageSenderField: document.getElementById('messageSenderField')?.value || 'sender',
+                enableFallbackApi: document.getElementById('enableFallbackApi')?.checked || false,
+                enableRetryLogic: document.getElementById('enableRetryLogic')?.checked || true,
+                maxRetries: parseInt(document.getElementById('maxRetries')?.value) || 3
+            };
 
             const config = {
                 branding: {
@@ -441,9 +600,10 @@
                     authRegisterUrl: authRegisterUrl,
                     chatApiBaseUrl: chatApiBaseUrl,
                     netqueryApiUrl: netqueryApiUrl,
-                    historyApiUrl: `${baseUrl}/history`,
-                    templateApiUrl: `${baseUrl}/api/v1/template`,
-                    feedbackApiUrl: `${baseUrl}/api/v1/feedback`
+                    historyApiUrl: historyApiUrl,
+                    templateApiUrl: templateApiUrl,
+                    feedbackApiUrl: feedbackApiUrl,
+                    ...(fallbackApiBaseUrl && { fallbackApiBaseUrl: fallbackApiBaseUrl })
                 },
                 features: {
                     enableChat: true, // Always enabled
@@ -455,13 +615,24 @@
                     enableThemeSwitcher: document.getElementById('enableThemeSwitcher').checked,
                     enableFeedback: document.getElementById('enableFeedback').checked
                 },
+                responseMapping: responseMapping,
+                ui: {
+                    chatWindowTitle: "AI Assistant",
+                    placeholderText: "Type your message here...",
+                    welcomeMessage: "Hello! I'm here to help you with your queries.",
+                    defaultTheme: "light"
+                },
                 customStyles: {
                     "--navbar-bg": primaryColor,
                     "--sidebar-bg": "#2d2d2d",
                     "--chat-bubble-user": primaryColor,
                     "--chat-bubble-assistant": "#f0f0f0"
                 },
-                version: "1.0.0"
+                deployment: {
+                    environment: "production",
+                    version: "1.0.0",
+                    buildDate: new Date().toISOString()
+                }
             };
 
             const configJson = JSON.stringify(config, null, 2);

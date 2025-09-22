@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !req.url.endsWith('/token')) {
-          // this.authService.logout(true);
+          this.authService.logout(true);
         }
         return throwError(() => error);
       })

@@ -1,37 +1,62 @@
 {
-    "branding": {
-        "appName": "Cool",
-        "logoUrl": "/assets/ai-agent-logo.svg",
-        "faviconUrl": "/assets/ai-agent-logo-favicon.ico",
-        "primaryColor": "#f264a1",
-        "secondaryColor": "#8b5cf6",
-        "darkModeEnabled": true
-    },
-    "apiEndpoints": {
-        "baseUrl": "http://localhost:8000",
-        "authTokenUrl": "http://localhost:8000/auth/login",
-        "authRegisterUrl": "http://localhost:8000/auth/register",
-        "chatApiBaseUrl": "http://localhost:8000/api/v1",
-        "netqueryApiUrl": "http://localhost:8000/query/stream",
-        "historyApiUrl": "http://localhost:8000/history",
-        "templateApiUrl": "http://localhost:8000/api/v1/template",
-        "feedbackApiUrl": "http://localhost:8000/api/v1/feedback"
-    },
-    "features": {
-        "enableChat": true,
-        "enableDataDashboard": true,
-        "enableSettingsDashboard": true,
-        "enableDebugLogging": false,
-        "enableMockData": false,
-        "enableRegistration": true,
-        "enableThemeSwitcher": true,
-        "enableFeedback": true
-    },
-    "customStyles": {
-        "--navbar-bg": "#f264a1",
-        "--sidebar-bg": "#2d2d2d",
-        "--chat-bubble-user": "#f264a1",
-        "--chat-bubble-assistant": "#f0f0f0"
-    },
-    "version": "1.0.0"
+  "branding": {
+    "appName": "Novu.AI",
+    "logoUrl": "",
+    "faviconUrl": "",
+    "primaryColor": "#6366f1",
+    "secondaryColor": "#8b5cf6",
+    "darkModeEnabled": true
+  },
+  "apiEndpoints": {
+    "baseUrl": "http://localhost:8000",
+    "authTokenUrl": "http://localhost:8000/auth/login",
+    "authRegisterUrl": "http://localhost:8000/auth/register",
+    "chatApiBaseUrl": "http://localhost:8000/api/v1",
+    "netqueryApiUrl": "http://localhost:8000/query/stream",
+    "historyApiUrl": "http://localhost:8000/history",
+    "templateApiUrl": "http://localhost:8000/api/v1/template",
+    "feedbackApiUrl": "http://localhost:8000/api/v1/feedback"
+  },
+  "features": {
+    "enableChat": true,
+    "enableDataDashboard": true,
+    "enableSettingsDashboard": true,
+    "enableDebugLogging": false,
+    "enableMockData": false,
+    "enableRegistration": true,
+    "enableThemeSwitcher": true,
+    "enableFeedback": true
+  },
+  "responseMapping": {
+    "chatResponseType": "streaming",
+    "responseContentField": "result",
+    "streamChunkField": "chunk",
+    "streamCompleteField": "synthesis",
+    "threadsArrayField": "threads",
+    "messagesArrayField": "messages",
+    "threadIdField": "_id",
+    "threadNameField": "name",
+    "messageContentField": "content",
+    "messageSenderField": "sender",
+    "enableFallbackApi": false,
+    "enableRetryLogic": true,
+    "maxRetries": 3
+  },
+  "ui": {
+    "chatWindowTitle": "AI Assistant",
+    "placeholderText": "Type your message here...",
+    "welcomeMessage": "Hello! I'm here to help you with your queries.",
+    "defaultTheme": "light"
+  },
+  "customStyles": {
+    "--navbar-bg": "#6366f1",
+    "--sidebar-bg": "#2d2d2d",
+    "--chat-bubble-user": "#6366f1",
+    "--chat-bubble-assistant": "#f0f0f0"
+  },
+  "deployment": {
+    "environment": "production",
+    "version": "1.0.0",
+    "buildDate": "2025-09-22T09:27:21.857Z"
+  }
 }
