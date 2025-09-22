@@ -1,0 +1,35 @@
+{
+  "branding": {
+    "appName": "Healthcare AI Chat",
+    "logoUrl": "/assets/healthcare-logo.png",
+    "faviconUrl": "/assets/healthcare-favicon.ico",
+    "primaryColor": "#059669",
+    "secondaryColor": "#047857",
+    "darkModeEnabled": true
+  },
+  "apiEndpoints": {
+    "baseUrl": "https://api.healthcareai.com",
+    "authTokenUrl": "https://api.healthcareai.com/auth/login",
+    "authRegisterUrl": "https://api.healthcareai.com/auth/register",
+    "chatApiBaseUrl": "https://chat.healthcareai.com/api/v1",
+    "netqueryApiUrl": "https://api.healthcareai.com/medical/query",
+    "historyApiUrl": "https://api.healthcareai.com/patient/history",
+    "templateApiUrl": "https://api.healthcareai.com/api/v1/templates",
+    "feedbackApiUrl": "https://api.healthcareai.com/api/v1/feedback"
+  },
+  "features": {
+    "enableDebugLogging": false,
+    "enableMockData": false,
+    "enableRegistration": false,
+    "enableThemeSwitcher": false,
+    "enableFeedback": true
+  },
+  "customStyles": {
+    "--navbar-bg": "#059669",
+    "--sidebar-bg": "#374151", 
+    "--chat-bubble-user": "#059669",
+    "--chat-bubble-assistant": "#ecfdf5",
+    "--font-family": "'Inter', sans-serif"
+  },
+  "version": "3.0.0"
+}

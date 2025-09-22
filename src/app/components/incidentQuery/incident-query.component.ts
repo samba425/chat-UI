@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ChatService } from '../../services/chat.service';
 import { ThemeService } from '../../services/theme.service';
+import { ConfigService } from '../../services/config.service';
 import { Observable } from 'rxjs';
 import { marked } from 'marked';
 
@@ -18,6 +19,17 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
   activeDataView: 'dashboard' | 'import' | 'status' = 'dashboard';
 
   selectTab(tab: string) {
+    // Check if the tab is enabled before switching
+    if (tab === 'data' && !this.enableDataDashboard) {
+      console.warn('Data dashboard is disabled in configuration');
+      this.activeTab = 'chat';
+      return;
+    }
+    if (tab === 'settings' && !this.enableSettingsDashboard) {
+      console.warn('Settings dashboard is disabled in configuration');
+      this.activeTab = 'chat';
+      return;
+    }
     this.activeTab = tab;
   }
 
@@ -50,6 +62,7 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
   isFocused = false;
   messages: any[] = [];
   threadMessages: { [key: string]: any[] } = {};
+  suggestions: string[] = [];
   newThreadCreated: boolean = false;
   loadingSend: boolean = false;
   // actionConfigs: { [threadId: string]: any } = {};
@@ -72,14 +85,31 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
   private previousMessagesLength = 0;
   private newMessageTimestamp = 0;
 
+  // Feature flags from config
+  enableDataDashboard: boolean = false;
+  enableSettingsDashboard: boolean = false;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private chatService: ChatService,
     private themeService: ThemeService,
+    private configService: ConfigService,
     private zone: NgZone
   ) {
     this.isDarkMode$ = this.themeService.isDarkMode$;
+    
+    // Load feature flags from config
+    const config = this.configService.getConfig();
+    this.enableDataDashboard = config.features?.enableDataDashboard || false;
+    this.enableSettingsDashboard = config.features?.enableSettingsDashboard || false;
+    
+    // Debug logging
+    console.log('🔧 Feature flags loaded:', {
+      enableDataDashboard: this.enableDataDashboard,
+      enableSettingsDashboard: this.enableSettingsDashboard,
+      fullConfig: config
+    });
   }
 
   ngOnInit() {
@@ -88,6 +118,7 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
     this.messagesLength = this.messages.length;
 
     this.loadChatHistory();
+    this.loadSuggestions();
 
     let textarea = document.querySelector('textarea') as HTMLTextAreaElement;
     if (textarea) {
@@ -103,6 +134,15 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
   }
 
   loadChatHistory() {
+    // Check if mock data is enabled
+    const config = this.configService.getConfig();
+    if (config.features?.enableMockData) {
+      console.log('🎭 Loading mock chat data...');
+      this.loadMockChatData();
+      return;
+    }
+
+    // Original API call for real data
     const mockResponse = {
       "items": [
         {
@@ -144,12 +184,66 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
           console.error('No history found or API error:', response?.detail || response);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('API failed error', err);
         this.threads = [];
         this.threadMessages = {};
       }
     });
+  }
+
+  async loadMockChatData() {
+    try {
+      // Load mock threads
+      const threadsResponse = await this.chatService.getThreads() as any;
+      if (threadsResponse && threadsResponse.threads) {
+        this.threads = threadsResponse.threads;
+        console.log('🎭 Loaded mock threads:', this.threads);
+
+        // Load messages for each thread
+        this.threadMessages = {};
+        for (const thread of this.threads) {
+          const messagesResponse = await this.chatService.getChatByThreadId(thread._id) as any;
+          console.log(`🎭 Messages response for thread ${thread._id}:`, messagesResponse);
+          
+          if (messagesResponse && messagesResponse.messages) {
+            // Convert mock messages to the expected format
+            this.threadMessages[thread._id] = messagesResponse.messages.map((msgData: any) => {
+              const convertedMessage = {
+                _id: 'msg_' + Date.now() + '_' + Math.random(),
+                createdAt: msgData.message.metadata.timestamp,
+                message: {
+                  metadata: { 
+                    sender: msgData.message.metadata.sender === 'ASSISTANT' ? 'SYSTEM' : msgData.message.metadata.sender 
+                  },
+                  output: msgData.message.content,
+                  safeOutput: this.createSafeHtml(msgData.message.content)
+                }
+              };
+              console.log(`🎭 Converted message:`, convertedMessage);
+              return convertedMessage;
+            });
+          }
+        }
+
+        console.log('🎭 Loaded mock messages:', this.threadMessages);
+
+        // Group threads and select the first one
+        this.groupThreadsByDate();
+        
+        if (this.threads.length > 0) {
+          this.selectThread(this.threads[0]);
+        } else {
+          this.newThread();
+        }
+      }
+    } catch (error) {
+      console.error('Error loading mock chat data:', error);
+      // Fallback to empty state
+      this.threads = [];
+      this.threadMessages = {};
+      this.newThread();
+    }
   }
 
   processHistoryResponse(response: any) {
@@ -353,6 +447,11 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
     this.selectedThread = thread;
     this.previousMessagesLength = 0; // Reset tracking when switching threads
     this.messages = this.threadMessages[thread._id] || [];
+    
+    console.log(`🎯 Selected thread: ${thread._id}`, thread);
+    console.log(`🎯 Thread messages:`, this.threadMessages[thread._id]);
+    console.log(`🎯 Current messages array:`, this.messages);
+    
     this.updateMessageTracking();
     this.shouldAutoScroll = true;
     this.cdRef.detectChanges();
@@ -377,7 +476,7 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
     textarea.style.height = `${Math.min(newHeight, this.maxHeight)}px`;
   }
  
-  sendMessage() {
+  async sendMessage() {
     if (!this.textareaValue.trim()) return;
 
     this.loadingSend = true;
@@ -393,19 +492,37 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
     let currentThreadId = this.selectedThread._id;
 
     if (this.isNewThread) {
-      const newThreadId = 'thread_' + new Date().getTime();
-      const newThread = {
-        _id: newThreadId,
-        name: this.textareaValue.trim().substring(0, 30),
-        usecase_name: 'New Conversation',
-        createdAt: Date.now()
-      };
-      this.threads.unshift(newThread);
-      this.groupThreadsByDate();
-      this.threadMessages[newThreadId] = [];
-      this.selectThread(newThread);
-      this.isNewThread = false;
-      currentThreadId = newThreadId;
+      // Save the new thread using chat service (handles mock data automatically)
+      const threadTitle = this.textareaValue.trim().substring(0, 30);
+      try {
+        const response = await this.chatService.saveThread(threadTitle) as any;
+        if (response && response.thread) {
+          const newThread = response.thread;
+          this.threads.unshift(newThread);
+          this.groupThreadsByDate();
+          this.threadMessages[newThread._id] = [];
+          this.selectThread(newThread);
+          this.isNewThread = false;
+          currentThreadId = newThread._id;
+        }
+      } catch (error) {
+        console.error('Error saving new thread:', error);
+        // Fallback to local thread creation
+        const newThreadId = 'thread_' + new Date().getTime();
+        const newThread = {
+          _id: newThreadId,
+          name: threadTitle,
+          usecase_name: 'New Conversation',
+          createdAt: Date.now(),
+          updated_at: Date.now()
+        };
+        this.threads.unshift(newThread);
+        this.groupThreadsByDate();
+        this.threadMessages[newThreadId] = [];
+        this.selectThread(newThread);
+        this.isNewThread = false;
+        currentThreadId = newThreadId;
+      }
     }
 
     // Defensive: Ensure threadMessages[currentThreadId] is initialized
@@ -413,6 +530,13 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
       this.threadMessages[currentThreadId] = [];
     }
     this.threadMessages[currentThreadId].push(userMessage);
+
+    // Save the user message using chat service (handles mock data automatically)
+    try {
+      await this.chatService.saveChat(currentThreadId, messageText);
+    } catch (error) {
+      console.error('Error saving user message:', error);
+    }
 
     const loadingMessageId = 'ai_loading_' + new Date().getTime();
     const loadingMessage = {
@@ -687,6 +811,35 @@ export class incidentQueryComponent implements AfterViewChecked, OnDestroy {
         this.previousMessagesLength = this.messages.length;
         console.log('Animation trigger: reset phase');
       }, 3000); // 3 seconds for animation to complete
+    }
+  }
+
+  async loadSuggestions() {
+    try {
+      const response = await this.chatService.getSuggestions() as any;
+      if (response && response.suggestions) {
+        this.suggestions = response.suggestions;
+        console.log('📝 Loaded suggestions:', this.suggestions);
+      }
+    } catch (error) {
+      console.error('Error loading suggestions:', error);
+      this.suggestions = [];
+    }
+  }
+
+  // Test method to verify mock data loading
+  testMockDataLoading() {
+    console.log('🧪 Testing mock data loading...');
+    console.log('🧪 Current threads:', this.threads);
+    console.log('🧪 Current threadMessages:', this.threadMessages);
+    console.log('🧪 Current messages array:', this.messages);
+    console.log('🧪 Selected thread:', this.selectedThread);
+    
+    // Force a message refresh
+    if (this.selectedThread._id && this.threadMessages[this.selectedThread._id]) {
+      this.messages = [...this.threadMessages[this.selectedThread._id]];
+      this.cdRef.detectChanges();
+      console.log('🧪 Refreshed messages:', this.messages);
     }
   }
 }

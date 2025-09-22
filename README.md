@@ -1,21 +1,80 @@
-# Angular frontend using Polarity
+# Dynamic Angular Chat Application
 
-# # Novus chat-Chatbot
-ChatBot UI for the Novus chat using Angular Polarity
+A fully configurable Angular chat application that supports dynamic branding, API configuration, and white-label deployments.
 
+## 🚀 Key Features
+
+- **Dynamic Branding**: Customize app name, logo, colors, and themes
+- **Configurable APIs**: Set different API endpoints for different environments/clients
+- **White-Label Ready**: Deploy the same codebase for multiple clients with different branding
+- **Feature Toggles**: Enable/disable features per deployment
+- **Multi-Tenant Support**: Support multiple clients with different configurations
+
+## 📋 Quick Start
+
+### 1. Basic Setup
+```bash
+npm install
+npm start
+```
+
+### 2. Custom Configuration
+```bash
+# Generate a custom configuration
+./generate-config.sh "my-client" "https://api.myclient.com" "My Chat App" "#ff6b35"
+
+# Build and deploy
+npm run build
+```
+
+### 3. View Configuration Demo
+Open `demo-config.html` in your browser to see dynamic configuration examples.
+
+## 🎨 Configuration Methods
+
+### Method 1: JSON Configuration (Recommended)
+Create or modify `/assets/config.json`:
+```json
+{
+  "branding": {
+    "appName": "Your Custom Chat App",
+    "logoUrl": "/assets/your-logo.png",
+    "primaryColor": "#0066cc"
+  },
+  "apiEndpoints": {
+    "baseUrl": "https://your-api-domain.com"
+  }
+}
+```
+
+### Method 2: JavaScript Override
+```javascript
+window.appConfig = {
+  appName: "Custom Chat",
+  logoUrl: "/assets/custom-logo.png",
+  primaryColor: "#ff6b35"
+};
+```
+
+### Method 3: Docker Environment Variables
+```bash
+docker run -e APP_NAME="Custom Chat" -e PRIMARY_COLOR="#ff6b35" your-chat-app
+```
+
+## 📚 Documentation
+
+- **[Complete Configuration Guide](DYNAMIC_CONFIG_GUIDE.md)** - Detailed setup instructions
+- **[Example Configurations](src/assets/config-examples/)** - Ready-to-use examples
+- **[Docker Multi-Tenant Setup](docker-compose.multi-tenant.yml)** - Multiple client deployment
+
+## 🛠 Development
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.18.
 
-## Development server
+### Development server
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
+### Build
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests

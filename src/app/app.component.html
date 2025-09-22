@@ -1,11 +1,12 @@
 <div class="app-container">
-  <header class="navbar navbar-expand-lg navbar-dark bg-dark magnetic-dark" name="Novus.AI" *ngIf="authService.isLoggedIn()">
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark magnetic-dark" [attr.name]="appName" *ngIf="authService.isLoggedIn()">
     <div class="container-fluid">
-      <div class="navbar-brand">  
-        <span class="header-heading-title">Novus.AI</span>
+      <div class="navbar-brand d-flex align-items-center">  
+        <img [src]="logoUrl" [alt]="appName + ' Logo'" class="navbar-logo me-2" *ngIf="logoUrl" style="height: 32px; width: auto;">
+        <span class="header-heading-title">{{ appName }}</span>
       </div>
       <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
-        <div class="theme-dropdown me-3" [class.open]="isDropdownOpen">
+        <div class="theme-dropdown me-3" [class.open]="isDropdownOpen" *ngIf="availableThemes.length > 0">
           <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" 
                   (click)="toggleDropdown()">
             <i class="bi bi-palette me-1"></i>

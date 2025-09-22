@@ -4,18 +4,21 @@ import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.authTokenUrl;
-  private registerUrl = environment.authRegisterUrl;
   private tokenKey = environment.authTokenKey;
   private usernameSubject = new BehaviorSubject<string | null>(sessionStorage.getItem('username')?.split('@')[0] || null);
   public username$ = this.usernameSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private configService: ConfigService
+  ) {}
 
   login(credentials: any, password: string): Observable<any> {
     // Fallback for demo user if server is not working
@@ -27,7 +30,9 @@ export class AuthService {
       console.log('Login Successful', `Welcome back, ${credentials.email}!`);
       return of({ access_token: dummyToken, username: credentials.email });
     }
-    return this.http.post<any>(this.apiUrl, { email: credentials.email, password }).pipe(
+    
+    const apiUrl = this.configService.getApiEndpoints().authTokenUrl;
+    return this.http.post<any>(apiUrl, { email: credentials.email, password }).pipe(
       tap(response => {
         if (response && response.access_token) {
           this.setToken(response.access_token);
@@ -53,7 +58,8 @@ export class AuthService {
   }
 
   register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post<any>(this.registerUrl, { username, email, password }).pipe(
+    const registerUrl = this.configService.getApiEndpoints().authRegisterUrl;
+    return this.http.post<any>(registerUrl, { username, email, password }).pipe(
       tap(() => {
         console.log('Registration Successful', 'You can now log in.');
       }),

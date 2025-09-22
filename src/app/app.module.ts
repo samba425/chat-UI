@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component'; 
@@ -19,6 +19,13 @@ import { DocumentListComponent } from './components/document-list/document-list.
 import { ImportDataComponent } from './components/import-data/import-data.component';
 import { StatusDashboardComponent } from './components/status-dashboard/status-dashboard.component';
 import { StatusService } from './services/status.service';
+import { ConfigService } from './services/config.service';
+import { AppInitializationService } from './services/app-initialization.service';
+
+// Factory function for app initialization
+export function appInitializerFactory(appInitService: AppInitializationService) {
+  return () => appInitService.initializeApp();
+}
 
 @NgModule({
   declarations: [
@@ -43,7 +50,24 @@ import { StatusService } from './services/status.service';
     FormsModule,
     CustomDateTimePipe
     ],
-  providers: [ChatService, ThemeService, StatusService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [
+    ChatService, 
+    ThemeService, 
+    StatusService,
+    ConfigService,
+    AppInitializationService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFactory,
+      deps: [AppInitializationService],
+      multi: true
+    },
+    { 
+      provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor, 
+      multi: true 
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

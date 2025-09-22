@@ -3,65 +3,240 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  baseUrl: string = environment.chatApiBaseUrl;
-  netqueryUrl: string = environment.netqueryApiUrl;
-  historyUrl: string = environment.historyApiUrl;
+  private mockThreads = [
+    {
+      _id: 'mock-thread-1',
+      name: 'Sample Chat: Getting Started.....',
+      usecase_name: 'How to use AI Agent UI',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      _id: 'mock-thread-2',
+      name: 'Sample Chat: API Integration',
+      usecase_name: 'How to connect your API',
+      created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      updated_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    },
+    {
+      _id: 'mock-thread-3',
+      name: 'Sample Chat: Configuration',
+      usecase_name: 'Customizing your app settings',
+      created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      updated_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    }
+  ];
+
+  private mockMessages = [
+    {
+      thread_id: "mock-thread-1",
+      message: {
+        content: "Hello! Welcome to AI Agent UI. This is mock data to help you test the interface. How can I assist you today?",
+        metadata: {
+          sender: "ASSISTANT",
+          timestamp: new Date().toISOString()
+        }
+      }
+    },
+    {
+      thread_id: "mock-thread-1",
+      message: {
+        content: "What features are available in this AI Agent UI?",
+        metadata: {
+          sender: "USER",
+          timestamp: new Date(Date.now() - 60000).toISOString()
+        }
+      }
+    },
+    {
+      thread_id: "mock-thread-1",
+      message: {
+        content: "This AI Agent UI includes several powerful features:\n\n• **Chat Interface** - Interactive conversations with AI\n• **Data Dashboard** - Analytics and insights\n• **Settings Panel** - Configuration management\n• **Theme Switcher** - Light/dark mode support\n• **Mock Data Mode** - Testing without real API\n\nAll features are configurable through the config.json file!",
+        metadata: {
+          sender: "ASSISTANT",
+          timestamp: new Date(Date.now() - 30000).toISOString()
+        }
+      }
+    },
+    {
+      thread_id: "mock-thread-2",
+      message: {
+        content: "How do I integrate my own API endpoints?",
+        metadata: {
+          sender: "USER",
+          timestamp: new Date(Date.now() - 90000).toISOString()
+        }
+      }
+    },
+    {
+      thread_id: "mock-thread-2",
+      message: {
+        content: "You can configure your API endpoints in the config.json file under the 'apiEndpoints' section. Update the chatApiBaseUrl, historyApiUrl, and netqueryApiUrl to point to your backend services.",
+        metadata: {
+          sender: "ASSISTANT",
+          timestamp: new Date(Date.now() - 120000).toISOString()
+        }
+      }
+    }
+  ];
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private configService: ConfigService
   ) { }
 
+  private get apiEndpoints() {
+    return this.configService.getApiEndpoints();
+  }
+
+  private get isMockDataEnabled() {
+    const config = this.configService.getConfig();
+    return config.features?.enableMockData || false;
+  }
+
   async getSuggestions() {
-    const url = `${this.baseUrl}/suggestions`;
-    return await this.http.get(url)
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            suggestions: [
+              "How do I configure the AI Agent UI?",
+              "What features are available in this app?",
+              "How can I customize the branding?",
+              "How do I enable different dashboards?",
+              "What API endpoints can I configure?"
+            ]
+          });
+        }, 500);
+      });
+    }
+    
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/suggestions`;
+    return await this.http.get(url);
   }
 
   async getThreads() {
-    const url = `${this.baseUrl}/threads`;
-    return await this.http.get(url)
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve({ threads: this.mockThreads });
+        }, 300);
+      });
+    }
+    
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads`;
+    return await this.http.get(url);
   }
 
   async saveThread(userInput: string, metadata?: any) {
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const newThread = {
+            _id: `thread_${Date.now()}`,
+            name: userInput,
+            usecase_name: "General Chat",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          };
+          this.mockThreads.unshift(newThread);
+          resolve({ thread: newThread });
+        }, 300);
+      });
+    }
+
     const payload = {
       "title": userInput,
       "metadata": metadata || {}
     }
-    const url = `${this.baseUrl}/threads`;
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads`;
     return await this.http.post(url, payload)
   }
 
   async updateThreadName(threadId: string, threadName: string) {
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const thread = this.mockThreads.find(t => t._id === threadId);
+          if (thread) {
+            thread.name = threadName;
+            thread.updated_at = new Date().toISOString();
+          }
+          resolve({ success: true, thread });
+        }, 200);
+      });
+    }
+
     const payload = {
       "name": threadName
     }
-    const url = `${this.baseUrl}/threads/${threadId}`;
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads/${threadId}`;
     return await this.http.put(url, payload)
   }
 
   async deleteThread(threadId: string) {
-    const url = `${this.baseUrl}/threads/${threadId}`;
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const index = this.mockThreads.findIndex(t => t._id === threadId);
+          if (index > -1) {
+            this.mockThreads.splice(index, 1);
+          }
+          resolve({ success: true });
+        }, 200);
+      });
+    }
+
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads/${threadId}`;
     return await this.http.delete(url)
   }
 
   async getChatByThreadId(threadId: string) {
-    const url = `${this.baseUrl}/threads/${threadId}/messages`;
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const threadMessages = this.mockMessages.filter(m => m.thread_id === threadId);
+          resolve({ messages: threadMessages });
+        }, 300);
+      });
+    }
+
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads/${threadId}/messages`;
     return await this.http.get(url)
   }
 
   async saveChat(threadId: string, message: string) {
+    if (this.isMockDataEnabled) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const newMessage = {
+            thread_id: threadId,
+            message: {
+              content: message,
+              metadata: {
+                sender: "USER",
+                timestamp: new Date().toISOString()
+              }
+            }
+          };
+          this.mockMessages.push(newMessage);
+          resolve({ message: newMessage });
+        }, 200);
+      });
+    }
+
     const payload = {
       "thread_id": threadId,
       "message": message
     }
-    const url = `${this.baseUrl}/threads/${threadId}/messages`;
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads/${threadId}/messages`;
     return await this.http.post(url, payload)
   }
 
@@ -71,12 +246,12 @@ export class ChatService {
       "comment": "This is what i expected",
       "reason": "CORRECT"
     }
-    const url = `${this.baseUrl}/threads/${threadId}/messages/${messageId}/feedback`;
+    const url = `${this.apiEndpoints.chatApiBaseUrl}/threads/${threadId}/messages/${messageId}/feedback`;
     return await this.http.post(url, payload)
   }
 
   getHistory(): Observable<any> {
-    const url = this.historyUrl;
+    const url = this.apiEndpoints.historyApiUrl;
     const headers = {
       'Content-Type': 'application/json'
     };
@@ -84,7 +259,34 @@ export class ChatService {
   }
 
   sendMessageToNetquery(message: string): Observable<any> {
-    const url = this.netqueryUrl; // Same API endpoint for both streaming and normal
+    if (this.isMockDataEnabled) {
+      return new Observable(observer => {
+        // Simulate streaming response for mock data
+        const mockResponses = [
+          "Processing your query using mock data...",
+          "Searching through available resources...",
+          "Here's a sample response for testing: ",
+          `Your query "${message}" has been processed. `,
+          "This demonstrates the AI Agent UI's streaming capability with mock data. ",
+          "All features are working correctly in mock mode!"
+        ];
+        
+        let index = 0;
+        const interval = setInterval(() => {
+          if (index < mockResponses.length) {
+            observer.next(JSON.stringify({ result: mockResponses[index] }));
+            index++;
+          } else {
+            clearInterval(interval);
+            observer.complete();
+          }
+        }, 800);
+        
+        return () => clearInterval(interval);
+      });
+    }
+
+    const url = this.apiEndpoints.netqueryApiUrl; // Same API endpoint for both streaming and normal
     
     const payload = {
       "tenant_id": "NOVUS_RAG",

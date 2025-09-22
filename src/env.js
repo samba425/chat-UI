@@ -24,9 +24,35 @@
 
   const config = getEnvironmentConfig();
 
-  // Environment variables with dynamic configuration
+  // Legacy environment variables for backward compatibility
   window["env"]["environment"] = config.environment;
   window["env"]["baseUrl"] = config.baseUrl;
+  
+  // New dynamic app configuration - can be overridden by external script
+  window["appConfig"] = window["appConfig"] || {
+    appName: "Novus.AI",
+    logoUrl: "/assets/novus-logo.png",
+    primaryColor: "#0066cc",
+    secondaryColor: "#004499",
+    darkModeEnabled: true,
+    
+    // API endpoints
+    baseUrl: config.baseUrl,
+    authTokenUrl: config.baseUrl + "/auth/login",
+    authRegisterUrl: config.baseUrl + "/auth/register",
+    chatApiBaseUrl: config.baseUrl + "/api/v1",
+    netqueryApiUrl: config.baseUrl + "/query/stream",
+    historyApiUrl: config.baseUrl + "/history",
+    templateApiUrl: config.baseUrl + "/api/v1/template",
+    feedbackApiUrl: config.baseUrl + "/api/v1/feedback",
+    
+    // Feature flags
+    enableDebugLogging: config.environment === 'development',
+    enableMockData: false,
+    enableRegistration: true,
+    enableThemeSwitcher: true,
+    enableFeedback: true
+  };
   
   // API Configuration
   window["env"]["apiUrl"] = config.baseUrl + "/api";

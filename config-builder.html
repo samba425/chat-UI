@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent UI - Configuration Builder</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .form-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        input[type="text"], input[type="url"], input[type="color"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .color-input {
+            width: 80px;
+            height: 50px;
+            padding: 4px;
+            cursor: pointer;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        .btn {
+            background: #6366f1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #5855eb;
+        }
+        .btn-secondary {
+            background: #64748b;
+        }
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        .preview-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .config-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .step-header {
+            background: #6366f1;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
+            margin: 30px 0 0 0;
+            font-weight: 600;
+        }
+        .step-content {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            border: 2px solid #6366f1;
+            border-top: none;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .logo-preview {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #10b981;
+            font-size: 12px;
+            padding: 8px 16px;
+        }
+        .copy-btn:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Agent UI Configuration Builder</h1>
+            <p>Build your custom configuration step by step</p>
+        </div>
+
+        <!-- Step 1: App Branding -->
+        <div class="step-header">
+            📱 Step 1: App Branding & Identity
+        </div>
+        <div class="step-content">
+            <div class="grid">
+                <div class="form-group">
+                    <label for="appName">App Name *</label>
+                    <input type="text" id="appName" value="AI Agent UI" placeholder="Your App Name">
+                    <div class="help-text">This will appear in the header and page title</div>
+                </div>
+                <div class="form-group">
+                    <label for="logoUrl">Logo URL</label>
+                    <input type="text" id="logoUrl" value="/assets/ai-agent-logo.svg" placeholder="/assets/your-logo.png">
+                    <div class="help-text">Path to your logo file in the assets folder</div>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="primaryColor">Primary Color *</label>
+                    <input type="color" id="primaryColor" value="#6366f1" class="color-input">
+                    <div class="help-text">Main brand color for buttons and accents</div>
+                </div>
+                <div class="form-group">
+                    <label for="secondaryColor">Secondary Color</label>
+                    <input type="color" id="secondaryColor" value="#8b5cf6" class="color-input">
+                    <div class="help-text">Darker shade for hover effects</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: API Configuration -->
+        <div class="step-header">
+            🔗 Step 2: API Endpoints Configuration
+        </div>
+        <div class="step-content">
+            <div class="form-group">
+                <label for="baseUrl">API Base URL *</label>
+                <input type="url" id="baseUrl" value="https://api.aiagent.com" placeholder="https://api.yourcompany.com">
+                <div class="help-text">Your main API server URL</div>
+            </div>
+            
+            <details>
+                <summary style="cursor: pointer; font-weight: 600; margin: 20px 0; color: #6366f1;">
+                    🔧 Advanced API Endpoints (Click to expand)
+                </summary>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="authTokenUrl">Login Endpoint</label>
+                        <input type="url" id="authTokenUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/auth/login</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="authRegisterUrl">Register Endpoint</label>
+                        <input type="url" id="authRegisterUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/auth/register</div>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="chatApiBaseUrl">Chat API URL</label>
+                        <input type="url" id="chatApiBaseUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/api/v1</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="netqueryApiUrl">Streaming Endpoint</label>
+                        <input type="url" id="netqueryApiUrl" placeholder="Auto-generated from base URL">
+                        <div class="help-text">Usually: {baseUrl}/query/stream</div>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Step 3: Features -->
+        <div class="step-header">
+            ⚙️ Step 3: Feature Configuration
+        </div>
+        <div class="step-content">
+            <!-- Core Features -->
+            <h4 style="color: #6366f1; margin-bottom: 15px;">🚀 Core Features</h4>
+            <div class="grid">
+                <div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableChat" checked disabled>
+                        <label for="enableChat">Enable Chat Interface</label>
+                        <div class="help-text">Always enabled - this is the main feature</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableDataDashboard">
+                        <label for="enableDataDashboard">Enable Data Dashboard</label>
+                        <div class="help-text">Shows data analytics and insights</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableSettingsDashboard">
+                        <label for="enableSettingsDashboard">Enable Settings Dashboard</label>
+                        <div class="help-text">Admin panel for configuration</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableRegistration" checked>
+                        <label for="enableRegistration">Enable User Registration</label>
+                        <div class="help-text">Allow new users to sign up</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableThemeSwitcher" checked>
+                        <label for="enableThemeSwitcher">Enable Theme Switcher</label>
+                        <div class="help-text">Light/dark mode toggle</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableFeedback" checked>
+                        <label for="enableFeedback">Enable User Feedback</label>
+                        <div class="help-text">Collect user feedback on responses</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Development & Testing -->
+            <h4 style="color: #f59e0b; margin: 25px 0 15px 0;">🔧 Development & Testing</h4>
+            <div class="grid">
+                <div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableDebugLogging">
+                        <label for="enableDebugLogging">Enable Debug Logging</label>
+                        <div class="help-text">Show detailed logs in console</div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableMockData">
+                        <label for="enableMockData">Enable Mock Data (Testing)</label>
+                        <div class="help-text">Use fake data for testing</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="darkModeEnabled" checked>
+                        <label for="darkModeEnabled">Enable Dark Mode</label>
+                        <div class="help-text">Allow users to switch to dark theme</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview & Output -->
+        <div class="form-card">
+            <h3>📋 Generated Configuration</h3>
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="btn" onclick="generateConfig()">🚀 Generate Configuration</button>
+                <button class="btn btn-secondary" onclick="downloadConfig()">📥 Download config.json</button>
+                <button class="btn copy-btn" onclick="copyConfig()">📋 Copy to Clipboard</button>
+            </div>
+            
+            <div class="config-output" id="configOutput">
+                Click "Generate Configuration" to see your config.json
+            </div>
+        </div>
+
+        <!-- Choose Your Method -->
+        <div class="form-card">
+            <h3>🎯 Choose Your Configuration Method</h3>
+            <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h4 style="color: #92400e; margin-top: 0;">⚠️ Important: You only need to use ONE method below!</h4>
+                <p style="color: #92400e; margin-bottom: 0;">Choose the method that works best for you - don't do both!</p>
+            </div>
+
+            <!-- Option 1: Visual Builder -->
+            <div style="border: 2px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h4 style="color: #10b981; margin-top: 0;">🎨 Option 1: Visual Builder (Recommended for beginners)</h4>
+                <p><strong>Best for:</strong> People who prefer visual interfaces and want to see changes immediately</p>
+                <ol>
+                    <li><strong>Use this form above</strong> to fill in your details</li>
+                    <li><strong>Click "Download config.json"</strong> to get your configuration file</li>
+                    <li><strong>Replace</strong> the existing <code>src/assets/config.json</code> with your downloaded file</li>
+                    <li><strong>Add your logo</strong> to <code>src/assets/</code> folder</li>
+                    <li><strong>Start your app:</strong> <code>npm start</code></li>
+                </ol>
+                <div style="background: #ecfdf5; padding: 15px; border-radius: 6px; margin: 10px 0;">
+                    <strong>✅ You're done!</strong> No terminal commands needed.
+                </div>
+            </div>
+
+            <!-- Option 2: Command Line -->
+            <div style="border: 2px solid #6366f1; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h4 style="color: #6366f1; margin-top: 0;">⌨️ Option 2: Command Line Generator</h4>
+                <p><strong>Best for:</strong> Developers who prefer terminal commands or need to automate the process</p>
+                <ol>
+                    <li><strong>Skip this form completely</strong></li>
+                    <li><strong>Open terminal</strong> in your project folder</li>
+                    <li><strong>Run the generator script:</strong></li>
+                </ol>
+                <div class="config-output" id="scriptCommand">
+                    ./generate-config.sh "your-company" "https://api.yourcompany.com" "Your App Name" "#your-color"
+                </div>
+                <ol start="4">
+                    <li><strong>Add your logo</strong> to <code>src/assets/</code> folder</li>
+                    <li><strong>Start your app:</strong> <code>npm start</code></li>
+                </ol>
+                <div style="background: #eff6ff; padding: 15px; border-radius: 6px; margin: 10px 0;">
+                    <strong>⚡ Fast setup!</strong> One command creates everything.
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div style="margin: 30px 0;">
+                <h4>🤔 Which method should I choose?</h4>
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <tr style="background: #f8fafc;">
+                        <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">Feature</th>
+                        <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">Visual Builder 🎨</th>
+                        <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">Command Line ⌨️</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Ease of use</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✅ Very Easy</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">⚡ Quick if you know terminal</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Preview before saving</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✅ Real-time preview</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">❌ No preview</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Technical knowledge needed</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">❌ None</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">⚠️ Basic terminal</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Speed</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">⚠️ Fill form + download</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✅ One command</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Good for automation</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">❌ Manual process</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✅ Can be scripted</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-update API endpoints when base URL changes
+        document.getElementById('baseUrl').addEventListener('input', function() {
+            const baseUrl = this.value;
+            if (baseUrl) {
+                document.getElementById('authTokenUrl').placeholder = `${baseUrl}/auth/login`;
+                document.getElementById('authRegisterUrl').placeholder = `${baseUrl}/auth/register`;
+                document.getElementById('chatApiBaseUrl').placeholder = `${baseUrl}/api/v1`;
+                document.getElementById('netqueryApiUrl').placeholder = `${baseUrl}/query/stream`;
+            }
+        });
+
+        // Update script command when values change
+        function updateScriptCommand() {
+            const appName = document.getElementById('appName').value;
+            const baseUrl = document.getElementById('baseUrl').value;
+            const primaryColor = document.getElementById('primaryColor').value;
+            const companyName = appName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            
+            const command = `./generate-config.sh "${companyName}" "${baseUrl}" "${appName}" "${primaryColor}"`;
+            document.getElementById('scriptCommand').textContent = command;
+        }
+
+        // Generate configuration JSON
+        function generateConfig() {
+            const appName = document.getElementById('appName').value;
+            const logoUrl = document.getElementById('logoUrl').value;
+            const primaryColor = document.getElementById('primaryColor').value;
+            const secondaryColor = document.getElementById('secondaryColor').value;
+            const baseUrl = document.getElementById('baseUrl').value;
+            
+            const authTokenUrl = document.getElementById('authTokenUrl').value || `${baseUrl}/auth/login`;
+            const authRegisterUrl = document.getElementById('authRegisterUrl').value || `${baseUrl}/auth/register`;
+            const chatApiBaseUrl = document.getElementById('chatApiBaseUrl').value || `${baseUrl}/api/v1`;
+            const netqueryApiUrl = document.getElementById('netqueryApiUrl').value || `${baseUrl}/query/stream`;
+
+            const config = {
+                branding: {
+                    appName: appName,
+                    logoUrl: logoUrl,
+                    faviconUrl: logoUrl.replace(/\.(svg|png|jpg)$/, '-favicon.ico'),
+                    primaryColor: primaryColor,
+                    secondaryColor: secondaryColor,
+                    darkModeEnabled: document.getElementById('darkModeEnabled').checked
+                },
+                apiEndpoints: {
+                    baseUrl: baseUrl,
+                    authTokenUrl: authTokenUrl,
+                    authRegisterUrl: authRegisterUrl,
+                    chatApiBaseUrl: chatApiBaseUrl,
+                    netqueryApiUrl: netqueryApiUrl,
+                    historyApiUrl: `${baseUrl}/history`,
+                    templateApiUrl: `${baseUrl}/api/v1/template`,
+                    feedbackApiUrl: `${baseUrl}/api/v1/feedback`
+                },
+                features: {
+                    enableChat: true, // Always enabled
+                    enableDataDashboard: document.getElementById('enableDataDashboard').checked,
+                    enableSettingsDashboard: document.getElementById('enableSettingsDashboard').checked,
+                    enableDebugLogging: document.getElementById('enableDebugLogging').checked,
+                    enableMockData: document.getElementById('enableMockData').checked,
+                    enableRegistration: document.getElementById('enableRegistration').checked,
+                    enableThemeSwitcher: document.getElementById('enableThemeSwitcher').checked,
+                    enableFeedback: document.getElementById('enableFeedback').checked
+                },
+                customStyles: {
+                    "--navbar-bg": primaryColor,
+                    "--sidebar-bg": "#2d2d2d",
+                    "--chat-bubble-user": primaryColor,
+                    "--chat-bubble-assistant": "#f0f0f0"
+                },
+                version: "1.0.0"
+            };
+
+            const configJson = JSON.stringify(config, null, 2);
+            document.getElementById('configOutput').textContent = configJson;
+            window.generatedConfig = configJson;
+            
+            updateScriptCommand();
+        }
+
+        // Download configuration as file
+        function downloadConfig() {
+            if (!window.generatedConfig) {
+                generateConfig();
+            }
+            
+            const blob = new Blob([window.generatedConfig], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Copy configuration to clipboard
+        async function copyConfig() {
+            if (!window.generatedConfig) {
+                generateConfig();
+            }
+            
+            try {
+                await navigator.clipboard.writeText(window.generatedConfig);
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                alert('Failed to copy to clipboard. Please copy manually.');
+            }
+        }
+
+        // Initialize
+        generateConfig();
+        
+        // Add event listeners to update config in real-time
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', generateConfig);
+            input.addEventListener('change', generateConfig);
+        });
+    </script>
+</body>
+</html>

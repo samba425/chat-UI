@@ -28,6 +28,13 @@ COPY --from=build /app/dist/novus-chat /usr/share/nginx/html
 # Copy custom nginx config if needed (optional)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Copy the dynamic configuration entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Set the custom entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 # Copy environment configuration files
 COPY src/assets/env.*.js /usr/share/nginx/html/assets/
 
